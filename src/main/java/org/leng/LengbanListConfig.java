@@ -4,6 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 
 public class LengbanListConfig {
@@ -28,12 +29,10 @@ public class LengbanListConfig {
         config = YamlConfiguration.loadConfiguration(configFile);
     }
 
-    // 获取配置文件对象
     public FileConfiguration getConfig() {
         return config;
     }
 
-    // 保存配置文件
     public void saveConfig() {
         try {
             config.save(configFile);
@@ -42,7 +41,6 @@ public class LengbanListConfig {
         }
     }
 
-    // 重新加载配置文件
     public void reloadConfig() {
         config = YamlConfiguration.loadConfiguration(configFile);
     }
@@ -54,8 +52,28 @@ public class LengbanListConfig {
     }
 
     // 更新封禁列表
-    public void updateBanList(java.util.List<String> newBanList) {
+    public void updateBanList(List<String> newBanList) {
         config.set("ban-list", newBanList);
         saveConfig();
+    }
+
+    // 获取封禁人数
+    public int getBanCount() {
+        return config.getInt("ban-count");
+    }
+
+    // 获取封禁列表
+    public List<String> getBanList() {
+        return config.getStringList("ban-list");
+    }
+
+    // 获取前缀
+    public String getPrefix() {
+        return config.getString("prefix");
+    }
+
+    // 获取默认消息
+    public String getDefaultMessage() {
+        return config.getString("default-message");
     }
 }
