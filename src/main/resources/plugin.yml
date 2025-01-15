@@ -1,0 +1,24 @@
+name: LengbanList
+main: org.leng.LengbanList
+version: 1.0
+commands:
+  lban:
+    description: LengbanList command
+    usage: /<command> [subcommand]
+    permission: lban.*
+    children:
+      a:
+        description: Broadcast current ban count
+        permission: lban.a
+      list:
+        description: Show ban list
+        permission: lban.list
+      reload:
+        description: Reload config
+        permission: lban.reload
+      add:
+        description: Add a ban
+        permission: lban.add
+      remove:
+        description: Remove a ban
+        permission: lban.remove
