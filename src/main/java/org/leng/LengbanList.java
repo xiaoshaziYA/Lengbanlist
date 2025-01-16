@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 
 public class LengbanList extends JavaPlugin {
     private static LengbanList instance;
-    public BanManager banManager;
+    private BanManager banManager;
 
     @Override
     public void onLoad() {
@@ -22,8 +22,8 @@ public class LengbanList extends JavaPlugin {
         banManager = new BanManager();
         getServer().getConsoleSender().sendMessage(prefix() + "正在加载");
         getServer().getPluginManager().registerEvents(new Listener(), this);
-        getCommandMap().register("", new LengbanListCommand("lban", this));
-        getCommandMap().register("", new LengbanListCommand("ban", this)); // 注册新的 /ban 命令
+        getCommand("lban").setExecutor(new LengbanListCommand(this));
+        getCommand("ban").setExecutor(new LengbanListCommand(this));
 
         getServer().getConsoleSender().sendMessage("  _                      ____              _      _     _   ");
         getServer().getConsoleSender().sendMessage(" | |                    |  _ \\            | |    (_)   | |  ");
@@ -47,15 +47,9 @@ public class LengbanList extends JavaPlugin {
         return instance;
     }
 
-    public static CommandMap getCommandMap() {
-        CommandMap commandMap = null;
-        try {
-            Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-            bukkitCommandMap.setAccessible(true);
-            commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return commandMap;
+    public BanManager getBanManager() {
+        return banManager;
     }
-}
+
+    public static CommandMap getCommandMap() {
+        CommandMap commandMap
