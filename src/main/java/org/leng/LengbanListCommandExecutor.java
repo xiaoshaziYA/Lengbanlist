@@ -1,11 +1,13 @@
 package org.leng;
 
-import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.BanList.Type;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.leng.object.BanEntry;
+import org.leng.utils.ConfigUtils;
+import org.leng.utils.TimeUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,8 +27,9 @@ public class LengbanListCommandExecutor implements CommandExecutor {
             return true;
         }
         switch (args[0].toLowerCase()) {
-            case "a":
+            case "broadcast":
                 // 广播当前封禁人数
+                LengbanList.getInstance().getServer().broadcastMessage(LengbanList.getInstance().getConfig().getString("default-message").replace("%s", String.valueOf(LengbanList.getInstance().banManager.getBanList().size())));
                 break;
             case "list":
                 showBanList(sender);
@@ -37,8 +40,12 @@ public class LengbanListCommandExecutor implements CommandExecutor {
                 break;
             case "add":
                 // 添加封禁
+                LengbanList.getInstance().banManager.banPlayer(new org.leng.object.BanEntry(args[1],sender.getName(), TimeUtils.generateTimestampFromDays(Integer.valueOf(args[2])),args[3]),Integer.valueOf(args[2]));
+                sender.sendMessage("成功");
                 break;
             case "remove":
+                LengbanList.getInstance().banManager.unbanPlayer(args[1]);
+                sender.sendMessage("成功");
                 // 移除封禁
                 break;
             case "help":
@@ -53,15 +60,9 @@ public class LengbanListCommandExecutor implements CommandExecutor {
 
     // 显示封禁列表的方法
     private void showBanList(CommandSender sender) {
-        BanList nameBanList = sender.getServer().getBanList(Type.NAME);
         sender.sendMessage("-----------------------------------LengbanList-------------------------------------");
-        for (BanEntry entry : nameBanList.getEntries()) {
-            String id = entry.getTargetName(); // 使用 getTargetName() 替代 getTarget()
-            Date createdDate = entry.getCreated(); // 确保 getCreated() 方法存在
-            String reason = entry.getReason(); // 确保 getReason() 方法存在
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String formattedDate = createdDate != null ? dateFormat.format(createdDate) : "未知";
-            sender.sendMessage("ID:" + id + " 封禁时间：" + formattedDate + " 封禁原因：" + reason);
+        for (BanEntry entry : LengbanList.getInstance().banManager.getBanList()) {
+            sender.sendMessage("Target: " + entry.getTarget() +" Staff: "+entry.getStaff() + " 封禁时间: " + TimeUtils.timestampToReadable(entry.getTime()) + " 封禁原因: " + entry.getReason());
         }
     }
 
