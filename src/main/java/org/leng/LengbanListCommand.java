@@ -2,12 +2,13 @@ package org.leng;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.leng.manager.BanManager;
 import org.leng.object.BanEntry;
 import org.leng.utils.TimeUtils;
 
-public class LengbanListCommand extends Command {
+public class LengbanListCommand extends Command implements CommandExecutor {
 
     private final LengbanList plugin;
 
@@ -35,6 +36,7 @@ public class LengbanListCommand extends Command {
         sender.sendMessage(ChatColor.YELLOW + "/lban reload - " + ChatColor.AQUA + "重载插件配置");
         sender.sendMessage(ChatColor.YELLOW + "/lban add <玩家名> <天数> <封禁原因> - " + ChatColor.AQUA + "添加封禁");
         sender.sendMessage(ChatColor.YELLOW + "/lban remove <玩家名> - " + ChatColor.AQUA + "移除封禁");
+        sender.sendMessage(ChatColor.YELLOW + "/ban <玩家名> <封禁原因> - " + ChatColor.AQUA + "封禁玩家");
         sender.sendMessage(ChatColor.RED + "作者: Leng");
         sender.sendMessage(ChatColor.BLUE + "版本: 1.0");
         sender.sendMessage(ChatColor.DARK_PURPLE + "授权: ColorFulCraft Network");
@@ -85,6 +87,18 @@ public class LengbanListCommand extends Command {
                 }
                 plugin.getBanManager().unbanPlayer(args[1]);
                 sender.sendMessage(ChatColor.GREEN + "成功移除玩家 " + args[1] + " 的封禁");
+                break;
+            case "ban":
+                if (args.length < 3) {
+                    sender.sendMessage(ChatColor.RED + "错误的指令格式！使用方法: /ban <玩家名> <封禁原因>");
+                    return true;
+                }
+                String target = args[1];
+                String reason = String.join(" ", java.util.Arrays.copyOfRange(args, 2, args.length));
+                int days = 365; // 默认封禁365天，即一年
+                BanEntry banEntry = new BanEntry(target, sender.getName(), TimeUtils.generateTimestampFromDays(days), reason);
+                plugin.getBanManager().banPlayer(banEntry, days);
+                sender.sendMessage(ChatColor.GREEN + "成功封禁玩家 " + target + "，原因: " + reason);
                 break;
             case "help":
                 showHelp(sender);
