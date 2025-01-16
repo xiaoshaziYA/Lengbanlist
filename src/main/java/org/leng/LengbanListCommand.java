@@ -41,7 +41,7 @@ public class LengbanListCommand extends Command {
             return false;
         }
         if (args.length == 0) {
-            sender.sendMessage("使用方法: /lban [子命令]");
+            sender.sendMessage("[LengBanList] 错误的指令格式！使用方法: /lban [子命令]");
             return true;
         }
         switch (args[0].toLowerCase()) {
