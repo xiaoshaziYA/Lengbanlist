@@ -8,42 +8,16 @@ import org.leng.manager.BanManager;
 import org.leng.object.BanEntry;
 import org.leng.utils.TimeUtils;
 
-public class LengbanListCommand extends Command implements CommandExecutor {
+public class LengbanListCommand implements CommandExecutor {
 
     private final LengbanList plugin;
 
-    public LengbanListCommand(String name, LengbanList plugin) {
-        super(name);
+    public LengbanListCommand(LengbanList plugin) {
         this.plugin = plugin;
     }
 
-    // 显示封禁列表的方法
-    private void showBanList(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "-----------------------------------LengbanList-------------------------------------");
-        for (BanEntry entry : plugin.getBanManager().getBanList()) {
-            sender.sendMessage(ChatColor.YELLOW + "Target: " + entry.getTarget() + 
-                               ChatColor.GREEN + " Staff: " + entry.getStaff() + 
-                               ChatColor.RED + " 封禁时间: " + TimeUtils.timestampToReadable(entry.getTime()) + 
-                               ChatColor.BLUE + " 封禁原因: " + entry.getReason());
-        }
-    }
-
-    // 显示帮助信息的方法
-    private void showHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.GREEN + "LengbanList 帮助信息:");
-        sender.sendMessage(ChatColor.YELLOW + "/lban list - " + ChatColor.AQUA + "显示封禁列表");
-        sender.sendMessage(ChatColor.YELLOW + "/lban broadcast - " + ChatColor.AQUA + "立即广播当前封禁人数");
-        sender.sendMessage(ChatColor.YELLOW + "/lban reload - " + ChatColor.AQUA + "重载插件配置");
-        sender.sendMessage(ChatColor.YELLOW + "/lban add <玩家名> <天数> <封禁原因> - " + ChatColor.AQUA + "添加封禁");
-        sender.sendMessage(ChatColor.YELLOW + "/lban remove <玩家名> - " + ChatColor.AQUA + "移除封禁");
-        sender.sendMessage(ChatColor.YELLOW + "/ban <玩家名> <封禁原因> - " + ChatColor.AQUA + "封禁玩家");
-        sender.sendMessage(ChatColor.RED + "作者: Leng");
-        sender.sendMessage(ChatColor.BLUE + "版本: 1.0");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "授权: ColorFulCraft Network");
-    }
-
     @Override
-    public boolean execute(CommandSender sender, String s, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender.isOp() || sender.hasPermission("lengbanlist.admin"))) {
             sender.sendMessage(ChatColor.RED + "[LengBanList] 错误：你没有权限执行此命令！");
             return false;
@@ -55,9 +29,9 @@ public class LengbanListCommand extends Command implements CommandExecutor {
         switch (args[0].toLowerCase()) {
             case "broadcast":
                 // 广播当前封禁人数
-                String message = LengbanList.getInstance().getConfig().getString("default-message")
+                String message = plugin.getConfig().getString("default-message")
                         .replace("%s", String.valueOf(plugin.getBanManager().getBanList().size()));
-                LengbanList.getInstance().getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));
+                plugin.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));
                 break;
             case "list":
                 showBanList(sender);
@@ -108,5 +82,28 @@ public class LengbanListCommand extends Command implements CommandExecutor {
                 break;
         }
         return true;
+    }
+
+    private void showBanList(CommandSender sender) {
+        sender.sendMessage(ChatColor.GOLD + "-----------------------------------LengbanList-------------------------------------");
+        for (BanEntry entry : plugin.getBanManager().getBanList()) {
+            sender.sendMessage(ChatColor.YELLOW + "Target: " + entry.getTarget() + 
+                               ChatColor.GREEN + " Staff: " + entry.getStaff() + 
+                               ChatColor.RED + " 封禁时间: " + TimeUtils.timestampToReadable(entry.getTime()) + 
+                               ChatColor.BLUE + " 封禁原因: " + entry.getReason());
+        }
+    }
+
+    private void showHelp(CommandSender sender) {
+        sender.sendMessage(ChatColor.GREEN + "LengbanList 帮助信息:");
+        sender.sendMessage(ChatColor.YELLOW + "/lban list - " + ChatColor.AQUA + "显示封禁列表");
+        sender.sendMessage(ChatColor.YELLOW + "/lban broadcast - " + ChatColor.AQUA + "立即广播当前封禁人数");
+        sender.sendMessage(ChatColor.YELLOW + "/lban reload - " + ChatColor.AQUA + "重载插件配置");
+        sender.sendMessage(ChatColor.YELLOW + "/lban add <玩家名> <天数> <封禁原因> - " + ChatColor.AQUA + "添加封禁");
+        sender.sendMessage(ChatColor.YELLOW + "/lban remove <玩家名> - " + ChatColor.AQUA + "移除封禁");
+        sender.sendMessage(ChatColor.YELLOW + "/ban <玩家名> <封禁原因> - " + ChatColor.AQUA + "封禁玩家");
+        sender.sendMessage(ChatColor.RED + "作者: Leng");
+        sender.sendMessage(ChatColor.BLUE + "版本: 1.0");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "授权: ColorFulCraft Network");
     }
 }
