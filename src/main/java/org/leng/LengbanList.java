@@ -1,7 +1,11 @@
 package org.leng;
 
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.leng.manager.BanManager;
+
+import java.lang.reflect.Field;
 
 public class LengbanList extends JavaPlugin {
     private static LengbanList instance;
@@ -17,8 +21,8 @@ public class LengbanList extends JavaPlugin {
         instance = this;
         banManager = new BanManager();
         getServer().getConsoleSender().sendMessage(prefix() + "正在加载");
-        this.getCommand("lban").setExecutor(new LengbanListCommandExecutor(this));
         getServer().getPluginManager().registerEvents(new Listener(),this);
+        getCommandMap().register("",new LengbanListCommand("lban",this));
     }
 
     @Override
@@ -29,8 +33,19 @@ public class LengbanList extends JavaPlugin {
         return getConfig().getString("prefix");
     }
 
-
     public static LengbanList getInstance() {
         return instance;
+    }
+
+    public static CommandMap getCommandMap() {
+        CommandMap commandMap = null;
+        try {
+            Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+            bukkitCommandMap.setAccessible(true);
+            commandMap = (CommandMap) bukkitCommandMap.get(Bukkit.getServer());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return commandMap;
     }
 }
