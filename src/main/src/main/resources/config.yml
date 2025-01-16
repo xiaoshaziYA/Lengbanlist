@@ -1,5 +1,0 @@
-prefix: "[LengBanList]"
-default-message: "ColorFulCraft Network 已封禁 %s 人 请文明游戏！禁止私自破坏建筑，机器！如果遭遇类似事件请联系管理！"
-sendtime: 5 #已分钟为单位
-opensendtime: true #开启循环播报封禁人数
-ban-list: []
