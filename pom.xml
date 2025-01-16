@@ -46,7 +46,7 @@
 
     <build>
         <defaultGoal>clean package</defaultGoal>
-        <finalName>${lengbanlist.name}</finalName>
+        <finalName>lengbanlist</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
