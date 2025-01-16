@@ -11,27 +11,30 @@ import java.util.List;
 
 public class BanManager {
 
-    public void banPlayer(BanEntry banEntry, int day) {
+    public void banPlayer(BanEntry banEntry,int day) {
         Long time = TimeUtils.generateTimestampFromDays(day);
-        String ban = banEntry.getTarget() + ":" + banEntry.getStaff() + ":" + time + ":" + banEntry.getReason();
+        String ban = banEntry.toString();
         List<String> banList = LengbanList.getInstance().getConfig().getStringList("ban-list");
         banList.add(ban);
         LengbanList.getInstance().getConfig().set("ban-list", banList);
         LengbanList.getInstance().saveConfig();
-
-        // 尝试获取玩家对象，如果玩家在线则立即踢出
-        Player targetPlayer = Bukkit.getPlayerExact(banEntry.getTarget());
+        Player targetPlayer = Bukkit.getPlayer(banEntry.getTarget());
         if (targetPlayer != null) {
-            targetPlayer.kickPlayer("您已被 " + banEntry.getStaff() + " 封禁，原因：" + banEntry.getReason() + " " + TimeUtils.timestampToReadable(time));
+            targetPlayer.kickPlayer("您已被 " + banEntry.getStaff() + " 封禁，原因："+banEntry.getReason()+" " + TimeUtils.timestampToReadable(time));
         }
-
-        // 广播封禁信息
-        Bukkit.broadcastMessage(banEntry.getTarget() + " 已被 " + banEntry.getStaff() + " 封禁，原因：" + banEntry.getReason() + " " + TimeUtils.timestampToReadable(time));
+        Bukkit.broadcastMessage(banEntry.getTarget() + " 已被 " + banEntry.getStaff() + " 封禁，原因：" + banEntry.getReason() + " " +  TimeUtils.timestampToReadable(time));
     }
 
     public void unbanPlayer(String target) {
         List<String> banList = LengbanList.getInstance().getConfig().getStringList("ban-list");
-        banList.removeIf(entry -> entry.split(":")[0].equals(target));
+        for (int i = 0; i < banList.size(); i++) {
+            String entry = banList.get(i);
+            String[] parts = entry.split(":");
+            if (parts[0].equals(target)) {
+                banList.remove(i);
+                break;
+            }
+        }
         LengbanList.getInstance().getConfig().set("ban-list", banList);
         LengbanList.getInstance().saveConfig();
     }
