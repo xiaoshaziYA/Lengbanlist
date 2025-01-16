@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.leng.LengbanList;
 import org.leng.manager.BanManager;
 import org.leng.object.BanEntry;
 import org.leng.utils.TimeUtils;
