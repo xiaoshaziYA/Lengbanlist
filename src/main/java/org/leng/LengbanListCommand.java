@@ -26,6 +26,7 @@ public class LengbanListCommand extends Command {
     private void showHelp(CommandSender sender) {
         sender.sendMessage("LengbanList 帮助信息:");
         sender.sendMessage("/lban list - 显示封禁列表");
+        sender.sendMessage("/lban broadcast - 立即广播当前封禁人数");
         sender.sendMessage("/lban reload - 重载插件配置");
         sender.sendMessage("/lban add <玩家名> - 添加封禁");
         sender.sendMessage("/lban remove <玩家名> - 移除封禁");
