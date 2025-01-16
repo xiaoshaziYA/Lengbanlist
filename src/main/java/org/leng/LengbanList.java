@@ -23,6 +23,7 @@ public class LengbanList extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(prefix() + "正在加载");
         getServer().getPluginManager().registerEvents(new Listener(), this);
         getCommandMap().register("", new LengbanListCommand("lban", this));
+        getCommandMap().register("", new LengbanListCommand("ban", this)); // 注册新的 /ban 命令
 
         getServer().getConsoleSender().sendMessage("  _                      ____              _      _     _   ");
         getServer().getConsoleSender().sendMessage(" | |                    |  _ \\            | |    (_)   | |  ");
