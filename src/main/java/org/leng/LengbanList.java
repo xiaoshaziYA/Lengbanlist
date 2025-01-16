@@ -21,11 +21,17 @@ public class LengbanList extends JavaPlugin {
         instance = this;
         banManager = new BanManager();
         getServer().getConsoleSender().sendMessage(prefix() + "正在加载");
-        getServer().getPluginManager().registerEvents(new Listener(),this);
-        getCommandMap().register("",new LengbanListCommand("lban",this));
-        if (getConfig().getBoolean("opensendtime")){
-            new BroadCastBanCountMessage().runTaskTimer(LengbanList.getInstance(), 0L, getConfig().getInt("sendtime")*1200L);
-        }
+        getServer().getPluginManager().registerEvents(new Listener(), this);
+        getCommandMap().register("", new LengbanListCommand("lban", this));
+
+        getServer().getConsoleSender().sendMessage("  _                      ____              _      _     _   ");
+        getServer().getConsoleSender().sendMessage(" | |                    |  _ \\            | |    (_)   | |  ");
+        getServer().getConsoleSender().sendMessage(" | |     ___ _ __   __ _| |_) | __ _ _ __ | |     _ ___| |_ ");
+        getServer().getConsoleSender().sendMessage(" | |    / _ \\ '_ \\ / _` |  _ < / _` | '_ \\| |    | / __| __|");
+        getServer().getConsoleSender().sendMessage(" | |___|  __/ | | | (_| | |_) | (_| | | | | |____| \\__ \\ |_ ");
+        getServer().getConsoleSender().sendMessage(" |______\\___|_| |_\\__, |____/ \\__,_|_| |_|______|_|___/\\__|");
+        getServer().getConsoleSender().sendMessage("                    __/ |                                    ");
+        getServer().getConsoleSender().sendMessage("                   |___/                                     ");
     }
 
     @Override
