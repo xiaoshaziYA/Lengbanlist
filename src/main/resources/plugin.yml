@@ -1,3 +1,10 @@
 name: LengbanList
 main: org.leng.LengbanList
 version: 1.0
+commands:
+  lban:
+    description: LengbanList 的主命令
+    usage: /<command> [子命令]
+  ban:
+    description: 封禁一个玩家
+    usage: /<command> <玩家名> <封禁原因>
