@@ -23,6 +23,9 @@ public class LengbanList extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(prefix() + "正在加载");
         getServer().getPluginManager().registerEvents(new Listener(),this);
         getCommandMap().register("",new LengbanListCommand("lban",this));
+        if (getConfig().getBoolean("opensendtime")){
+            new BroadCastBanCountMessage().runTaskTimer(LengbanList.getInstance(), 0L, getConfig().getInt("sendtime")*1200L);
+        }
     }
 
     @Override
