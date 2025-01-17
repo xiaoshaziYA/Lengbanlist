@@ -16,23 +16,24 @@ public class LengbanListCommand extends Command {
 
     // 显示封禁列表的方法
     private void showBanList(CommandSender sender) {
-        sender.sendMessage("-----------------------------------LengbanList-------------------------------------");
+        sender.sendMessage("§7--§bLengbanList§7--");
         for (BanEntry entry : LengbanList.getInstance().banManager.getBanList()) {
-            sender.sendMessage("Target: " + entry.getTarget() +" Staff: "+entry.getStaff() + " 封禁时间: " + TimeUtils.timestampToReadable(entry.getTime()) + " 封禁原因: " + entry.getReason());
+            sender.sendMessage("§9§o被封禁者: " + entry.getTarget() +" §6处理人: "+entry.getStaff() + " §d封禁时间: " + TimeUtils.timestampToReadable(entry.getTime()) + " §l§n封禁原因: " + entry.getReason());
         }
     }
 
     // 显示帮助信息的方法
     private void showHelp(CommandSender sender) {
-        sender.sendMessage("LengbanList 帮助信息:");
-        sender.sendMessage("/lban list - 显示封禁列表");
-        sender.sendMessage("/lban broadcast - 立即广播当前封禁人数");
-        sender.sendMessage("/lban reload - 重载插件配置");
-        sender.sendMessage("/lban add <玩家名> - 添加封禁");
-        sender.sendMessage("/lban remove <玩家名> - 移除封禁");
-        sender.sendMessage("作者: Leng");
-        sender.sendMessage("版本: 1.0");
-        sender.sendMessage("授权: ColorFulCraft Network");
+        sender.sendMessage("§bLengbanList §2§o帮助信息:");
+        sender.sendMessage("§b§l/lban list - §3§o显示封禁列表");
+        sender.sendMessage("§b§l/lban broadcast - §3§o立即广播当前封禁人数");
+        sender.sendMessage("§b§l/lban reload - §3§o重载插件配置");
+        sender.sendMessage("§b§l/lban add <玩家名> - §3§o添加封禁");
+        sender.sendMessage("§b§l/lban remove <玩家名> - §3§o移除封禁");
+        sender.sendMessage("§6推荐使用/lban 来添加封禁和解封，");
+        sender.sendMessage("§6否则功能将无法实现！");
+        sender.sendMessage("§6当前版本: 1.1");
+        sender.sendMessage("§6授权: §bColorFulCraft §fNetwork");
     }
 
     @Override
@@ -41,7 +42,7 @@ public class LengbanListCommand extends Command {
             return false;
         }
         if (args.length == 0) {
-            sender.sendMessage("使用方法: /lban [子命令]");
+                sender.sendMessage(plugin.prefix() + "§c§l错误的命令格式，正确格式/lban [子命令]§f，\n" + plugin.prefix() + "§c§l请输入/lban help打开帮助信息！");
             return true;
         }
         switch (args[0].toLowerCase()) {
@@ -54,16 +55,16 @@ public class LengbanListCommand extends Command {
                 break;
             case "reload":
                 plugin.reloadConfig();
-                sender.sendMessage(plugin.prefix() + "配置已重新加载。");
+                sender.sendMessage(plugin.prefix() + "§a配置已重新加载。");
                 break;
             case "add":
                 // 添加封禁
                 LengbanList.getInstance().banManager.banPlayer(new org.leng.object.BanEntry(args[1],sender.getName(), TimeUtils.generateTimestampFromDays(Integer.valueOf(args[2])),args[3]),Integer.valueOf(args[2]));
-                sender.sendMessage("成功");
+                sender.sendMessage("§a成功封禁" + getName());
                 break;
             case "remove":
                 LengbanList.getInstance().banManager.unbanPlayer(args[1]);
-                sender.sendMessage("成功");
+                sender.sendMessage("§a成功解封" + getName());
                 // 移除封禁
                 break;
             case "help":
