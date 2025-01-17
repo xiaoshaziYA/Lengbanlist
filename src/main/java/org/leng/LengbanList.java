@@ -32,7 +32,7 @@ public class LengbanList extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(" §b|______\\___|_| |_\\__, |____/ \\__,_|_| |_|______|_|___/\\__|");
         getServer().getConsoleSender().sendMessage("§b                   __/ |                                    ");
         getServer().getConsoleSender().sendMessage("§b                   |___/                                     ");
-        getServer().getConsoleSender().sendMessage("§b当前运行版本：v1.1 - SPIGOT");
+        getServer().getConsoleSender().sendMessage("§b当前运行版本：v1.2 - SPIGOT");
         getServer().getConsoleSender().sendMessage("§f推荐检查新版本在:https://github.com/xiaoshaziYA/Lengbanlist");
     }
 
