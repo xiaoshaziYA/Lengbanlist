@@ -20,9 +20,9 @@ public class BanManager {
         LengbanList.getInstance().saveConfig();
         Player targetPlayer = Bukkit.getPlayer(banEntry.getTarget());
         if (targetPlayer != null) {
-            targetPlayer.kickPlayer("您已被 " + banEntry.getStaff() + " 封禁，原因："+banEntry.getReason()+" " + TimeUtils.timestampToReadable(time));
+            targetPlayer.kickPlayer("§c§l您已被 " + banEntry.getStaff() + " §c§l封禁，§c§l原因："+banEntry.getReason()+" " + TimeUtils.timestampToReadable(time));
         }
-        Bukkit.broadcastMessage(banEntry.getTarget() + " 已被 " + banEntry.getStaff() + " 封禁，原因：" + banEntry.getReason() + " " +  TimeUtils.timestampToReadable(time));
+        Bukkit.broadcastMessage(banEntry.getTarget() + " §c§l已被 " + banEntry.getStaff() + " §c§l封禁，§c§l原因：" + banEntry.getReason() + " " +  TimeUtils.timestampToReadable(time));
     }
 
     public void unbanPlayer(String target) {
