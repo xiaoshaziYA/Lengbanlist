@@ -11,8 +11,7 @@ import java.util.List;
 
 public class BanManager {
 
-    public void banPlayer(BanEntry banEntry,int day) {
-        Long time = TimeUtils.generateTimestampFromDays(day);
+    public void banPlayer(BanEntry banEntry) {
         String ban = banEntry.toString();
         List<String> banList = LengbanList.getInstance().getConfig().getStringList("ban-list");
         banList.add(ban);
@@ -20,9 +19,9 @@ public class BanManager {
         LengbanList.getInstance().saveConfig();
         Player targetPlayer = Bukkit.getPlayer(banEntry.getTarget());
         if (targetPlayer != null) {
-            targetPlayer.kickPlayer("§c§l您已被 " + banEntry.getStaff() + " §c§l封禁，§c§l原因："+banEntry.getReason()+" " + TimeUtils.timestampToReadable(time));
+            targetPlayer.kickPlayer("§c§l您已被 " + banEntry.getStaff() + " §c§l封禁，§c§l原因："+banEntry.getReason()+" " + TimeUtils.timestampToReadable(banEntry.getTime()));
         }
-        Bukkit.broadcastMessage(banEntry.getTarget() + " §c§l已被 " + banEntry.getStaff() + " §c§l封禁，§c§l原因：" + banEntry.getReason() + " " +  TimeUtils.timestampToReadable(time));
+        Bukkit.broadcastMessage(banEntry.getTarget() + " §c§l已被 " + banEntry.getStaff() + " §c§l封禁，§c§l原因：" + banEntry.getReason() + " " +  TimeUtils.timestampToReadable(banEntry.getTime()));
     }
 
     public void unbanPlayer(String target) {
@@ -73,5 +72,17 @@ public class BanManager {
             }
         }
         return banList;
+    }
+
+    public void checkBanOnJoin(Player player) {
+        BanEntry ban = getBanEntry(player.getName());
+        if (ban != null) {
+            long currentTime = System.currentTimeMillis();
+            if (ban.getTime() <= currentTime) {
+                unbanPlayer(player.getName());
+            } else {
+                player.kickPlayer("您仍处于封禁状态，原因：" + ban.getReason() + "，封禁时间：" + TimeUtils.timestampToReadable(ban.getTime()));
+            }
+        }
     }
 }
