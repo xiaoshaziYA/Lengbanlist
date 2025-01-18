@@ -33,7 +33,7 @@ public class LengbanListCommand extends Command {
         sender.sendMessage("§b§l/lban remove <玩家名> - §3§o移除封禁");
         sender.sendMessage("§6推荐使用/lban 来添加封禁和解封，");
         sender.sendMessage("§6否则功能将无法实现！");
-        sender.sendMessage("§6当前版本: 1.1");
+        sender.sendMessage("§6当前版本: 1.3");
         sender.sendMessage("§6授权: §bColorFulCraft §fNetwork");
     }
 
