@@ -40,3 +40,6 @@ Lengbanlist is a plugin designed for high-version Minecraft servers. It broadcas
 
 Developer: darkpath2011, xiaoshaziYA
 Special thanks to: darkpath2011
+
+# Data statistics
+![Lengbanlist](https://bstats.org/signatures/bukkit/Lengbanlist.svg)
