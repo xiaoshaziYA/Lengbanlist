@@ -21,6 +21,7 @@ public class BanCommand extends Command {
         }
         if (args.length < 3) {
             Utils.sendMessage(sender,"§c用法错误: /ban <玩家> <时间> <原因>");
+            Utils.sendMessage(sender,"§c默认时间单位为天（若以天为单位请勿添加单位）");            
             return false;
         }
         long banTimestamp = TimeUtils.parseTime(args[1]);
