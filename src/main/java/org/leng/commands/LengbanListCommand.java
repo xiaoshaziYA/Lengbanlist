@@ -98,6 +98,7 @@ public class LengbanListCommand extends Command {
         Utils.sendMessage(sender,"§bLengbanList §2§o帮助信息:");
         Utils.sendMessage(sender,"§b§l/lban list - §3§o显示封禁列表");
         Utils.sendMessage(sender,"§b§l/lban a - §3§o立即广播当前封禁人数");
+        Utils.sendMessage(sender,"§b§l/lban toggle - §3§o开启/关闭 自动广播");
         Utils.sendMessage(sender,"§b§l/lban reload - §3§o重载插件配置");
         Utils.sendMessage(sender,"§b§l/lban add <玩家名> <天数> <原因> - §3§o添加封禁");
         Utils.sendMessage(sender,"§b§l/lban remove <玩家名> - §3§o移除封禁");
