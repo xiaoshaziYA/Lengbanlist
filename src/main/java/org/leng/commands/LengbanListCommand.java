@@ -32,13 +32,13 @@ public class LengbanListCommand extends Command {
 
         switch (args[0].toLowerCase()) {
             case "toggle":
-                if (!sender.isOp()){
+                if (!sender.hasPermission("lengban.toggle") && !(sender instanceof Player)){
                     return false;
                 }
                 Utils.sendMessage(sender,LengbanList.getInstance().toggleBroadcast());
                 break;
             case "a":
-                if (!sender.hasPermission("lengbanlist.a") && !(sender instanceof Player)){
+                if (!sender.hasPermission("lengban.a") && !(sender instanceof Player)){
                     return false;
                 }
                 LengbanList.getInstance().getServer().broadcastMessage(LengbanList.getInstance().getConfig().getString("default-message").replace("%s", String.valueOf(LengbanList.getInstance().banManager.getBanList().size())));
@@ -47,14 +47,14 @@ public class LengbanListCommand extends Command {
                 showBanList(sender);
                 break;
             case "reload":
-                if (!sender.isOp()){
+                if (!sender.hasPermission("lengban.reload") && !(sender instanceof Player)){
                     return false;
                 }
                 plugin.reloadConfig();
                 Utils.sendMessage(sender,plugin.prefix() + "§a配置已重新加载。");
                 break;
             case "add":
-                if (!sender.isOp()){
+                if (!sender.hasPermission("lengban.ban") && !(sender instanceof Player)){
                     return false;
                 }
                 if (args.length < 4) {
@@ -65,7 +65,7 @@ public class LengbanListCommand extends Command {
                 Utils.sendMessage(sender,"§a成功封禁" + args[1]);
                 break;
             case "remove":
-                if (!sender.isOp()){
+                if (!sender.hasPermission("lengban.unban") && !(sender instanceof Player)){
                     return false;
                 }
                 if (args.length < 2) {
@@ -85,7 +85,10 @@ public class LengbanListCommand extends Command {
         return true;
     }
 
-    // 显示封禁列表的方法
+    /**
+     * 显示封禁列表的方法
+     * @param sender
+     */
     private void showBanList(CommandSender sender) {
         Utils.sendMessage(sender,"§7--§bLengbanList§7--");
         for (BanEntry entry : LengbanList.getInstance().banManager.getBanList()) {
@@ -93,7 +96,10 @@ public class LengbanListCommand extends Command {
         }
     }
 
-    // 显示帮助信息的方法
+    /**
+     * 显示帮助信息的方法
+     * @param sender
+     */
     private void showHelp(CommandSender sender) {
         Utils.sendMessage(sender,"§bLengbanList §2§o帮助信息:");
         Utils.sendMessage(sender,"§b§l/lban list - §3§o显示封禁列表");
