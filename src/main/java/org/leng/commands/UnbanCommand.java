@@ -17,7 +17,8 @@ public class UnbanCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
         if(sender instanceof Player){
-            if (!sender.isOp()){
+            Player player = (Player) sender;
+            if (!(player.hasPermission("lengban.unban"))) {
                 return false;
             }
         }

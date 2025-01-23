@@ -14,10 +14,15 @@ public class BanCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
-        if (sender instanceof Player){
-            if (!sender.isOp()) {
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (!sender.isOp() || !(player.hasPermission("lengban.ban"))) {
                 return false;
             }
+        }
+        if (LengbanList.getInstance().banManager.isPlayerBanned(args[0])){
+            Utils.sendMessage(sender,"§c玩家 " + args[0] + " 已经被封禁");
+            return false;
         }
         if (args.length < 3) {
             Utils.sendMessage(sender,"§c用法错误: /ban <玩家> <时间> <原因>");
