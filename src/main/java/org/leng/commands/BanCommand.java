@@ -20,10 +20,8 @@ public class BanCommand extends Command {
                 return false;
             }
         }
-        String target = args[0];
-        String reason = args[2];
-        if (LengbanList.getInstance().banManager.isPlayerBanned(target)){
-            Utils.sendMessage(sender,"§c玩家 " + target + " 已经被封禁");
+        if (LengbanList.getInstance().banManager.isPlayerBanned(args[0])){
+            Utils.sendMessage(sender,"§c玩家 " + args[0] + " 已经被封禁");
             return false;
         }
         if (args.length < 3) {
@@ -43,9 +41,9 @@ public class BanCommand extends Command {
             return false;
         }
         LengbanList.getInstance().banManager.banPlayer(
-                new org.leng.object.BanEntry(target, sender.getName(), banTimestamp, reason)
+                new org.leng.object.BanEntry(args[0], sender.getName(), banTimestamp, args[2])
         );
-        Utils.sendMessage(sender,"§l§a成功封禁 玩家: " + target + "，时长: " + reason);
+        Utils.sendMessage(sender,"§l§a成功封禁 玩家: " + args[0] + "，时长: " + args[1]);
         return true;
     }
 }
