@@ -19,7 +19,7 @@ Lengbanlist 是一款适用于高版本我的世界服务器的插件，它基�
 ## 注意事项
 - 本人是开发小白，如果插件存在不足之处，还请各位多多包涵，不要随意喷。如果觉得插件还不错，欢迎给个 star。同时，希望大家能够积极参与，一起助力插件的更新，让它变得更好。
 - 本项目使用 Mozilla Public License Version 2.0，详情请查看 LICENSE 文件。
-- 
+
 开发者：darkpath2011,xiaoshaziYA
 特别感谢：darkpath2011
 ---
