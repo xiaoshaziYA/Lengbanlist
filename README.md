@@ -1,6 +1,6 @@
 # Lengbanlist 插件
 
-![lengbanlistinfo](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/Lengbanlist.png)
+![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/Lengbanlist.png)
 
 ## 简介
 Lengbanlist 是一款适用于高版本我的世界服务器的插件，它基于本地的 banlist 在聊天栏进行广播，方便管理员及时通知玩家被封禁信息，增强服务器管理的透明度。
