@@ -34,14 +34,14 @@ public class LengbanList extends JavaPlugin {
         getCommandMap().register("", new BanCommand());
         getCommandMap().register("", new UnbanCommand());
         getServer().getConsoleSender().sendMessage("§b  _                      ____              _      _     _   ");
-        getServer().getConsoleSender().sendMessage("§b | |                    |  _ \\            | |    (_)   | |  ");
+        getServer().getConsoleSender().sendMessage("§6 | |                    |  _ \\            | |    (_)   | |  ");
         getServer().getConsoleSender().sendMessage("§b | |     ___ _ __   __ _| |_) | __ _ _ __ | |     _ ___| |_ ");
-        getServer().getConsoleSender().sendMessage("§b | |    / _ \\ '_ \\ / _` |  _ < / _` | '_ \\| |    | / __| __|");
+        getServer().getConsoleSender().sendMessage("§f | |    / _ \\ '_ \\ / _` |  _ < / _` | '_ \\| |    | / __| __|");
         getServer().getConsoleSender().sendMessage("§b | |___|  __/ | | | (_| | |_) | (_| | | | | |____| \\__ \\ |_ ");
-        getServer().getConsoleSender().sendMessage(" §b|______\\___|_| |_\\__, |____/ \\__,_|_| |_|______|_|___/\\__|");
+        getServer().getConsoleSender().sendMessage(" §6|______\\___|_| |_\\__, |____/ \\__,_|_| |_|______|_|___/\\__|");
         getServer().getConsoleSender().sendMessage("§b                   __/ |                                    ");
-        getServer().getConsoleSender().sendMessage("§b                   |___/                                     ");
-        getServer().getConsoleSender().sendMessage("§b当前运行版本：v1.3 - SPIGOT");
+        getServer().getConsoleSender().sendMessage("§f                   |___/                                     ");
+        getServer().getConsoleSender().sendMessage("§b当前运行版本：v1.3 - fix");
         new Metrics(this, 24495);
         GitHubUpdateChecker.checkUpdata();
         if (isBroadcast){
