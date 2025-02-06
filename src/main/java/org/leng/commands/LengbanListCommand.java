@@ -108,9 +108,6 @@ public class LengbanListCommand extends Command {
         Utils.sendMessage(sender,"§b§l/lban reload - §3§o重载插件配置");
         Utils.sendMessage(sender,"§b§l/lban add <玩家名> <天数> <原因> - §3§o添加封禁");
         Utils.sendMessage(sender,"§b§l/lban remove <玩家名> - §3§o移除封禁");
-        Utils.sendMessage(sender,"§6推荐使用/lban 来添加封禁和解封，");
-        Utils.sendMessage(sender,"§6否则功能将无法实现！");
-        Utils.sendMessage(sender,"§6当前版本: 1.3");
-        Utils.sendMessage(sender,"§6授权: §bColorFulCraft §fNetwork");
+        Utils.sendMessage(sender,"§6当前版本: 1.3 - fix");
     }
 }
