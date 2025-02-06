@@ -28,7 +28,7 @@ Lengbanlist 是一款适用于高版本我的世界服务器的插件，它基�
 ![Lengbanlist](https://bstats.org/signatures/bukkit/Lengbanlist.svg) 
 ---
 
-# Lengbanlist Plugin![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/114514.gif)
+# Lengbanlist Plugin
 
 ## Introduction![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/114514.gif)
 Lengbanlist is a plugin designed for high-version Minecraft servers. It broadcasts information from the local banlist in the chat bar, facilitating administrators in promptly notifying players about banned information and enhancing the transparency of server management.
