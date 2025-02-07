@@ -41,7 +41,7 @@ public class LengbanList extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(" §6|______\\___|_| |_\\__, |____/ \\__,_|_| |_|______|_|___/\\__|");
         getServer().getConsoleSender().sendMessage("§b                   __/ |                                    ");
         getServer().getConsoleSender().sendMessage("§f                   |___/                                     ");
-        getServer().getConsoleSender().sendMessage("§b当前运行版本：v1.3 - fix");
+        getServer().getConsoleSender().sendMessage("§b当前运行版本：v1.3 - fix - 1");
         new Metrics(this, 24495);
         GitHubUpdateChecker.checkUpdata();
         if (isBroadcast){
