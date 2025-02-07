@@ -21,7 +21,7 @@ public class BanManager {
         if (targetPlayer != null) {
             targetPlayer.kickPlayer("§c§l您已被 " + banEntry.getStaff() + " §c§l封禁，§c§l原因："+banEntry.getReason()+" " + TimeUtils.timestampToReadable(banEntry.getTime()));
         }
-        Bukkit.broadcastMessage(banEntry.getTarget() + " §c§l已被 " + banEntry.getStaff() + " §c§l封禁，§c§l原因：" + banEntry.getReason() + " " +  TimeUtils.timestampToReadable(banEntry.getTime()));
+        Bukkit.broadcastMessage(banEntry.getTarget() + " §c§l已被 " + banEntry.getStaff() + " §c§l封禁，§c§l原因：" + banEntry.getReason() + " " +  "封禁到：" + TimeUtils.timestampToReadable(banEntry.getTime()));
     }
 
     public void unbanPlayer(String target) {
@@ -81,7 +81,7 @@ public class BanManager {
             if (ban.getTime() <= currentTime) {
                 unbanPlayer(player.getName());
             } else {
-                player.kickPlayer("您仍处于封禁状态，原因：" + ban.getReason() + "，封禁时间：" + TimeUtils.timestampToReadable(ban.getTime()));
+                player.kickPlayer("您仍处于封禁状态，原因：" + ban.getReason() + "，封禁到：" + TimeUtils.timestampToReadable(ban.getTime()));
             }
         }
     }
