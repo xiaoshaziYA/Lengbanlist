@@ -1,5 +1,5 @@
 # Lengbanlist 插件
-
+![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/Lengbanlist.png)
 ![Lengbanlist](https://bstats.org/signatures/bukkit/Lengbanlist.svg)
 
 ## 简介
@@ -21,10 +21,10 @@ Lengbanlist 是一款适用于高版本我的世界服务器的插件，它基�
   
 开发者：darkpath2011,xiaoshaziYA
 特别感谢：darkpath2011
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/Lengbanlist.png)
+
 如果有能力可以对我赞助哦：https://afdian.com/a/lengbanlist
 不提供退款渠道，未成年人禁止赞助，创作者不会返还赞助
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/Lengbanlist.png)
+
 ---
 
 # Lengbanlist Plugin
