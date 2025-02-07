@@ -3,3 +3,4 @@ default-message: "§f[§b§oColorFulCraft §f§oNetwork§f] §6当前§c已封�
 sendtime: 5 #已分钟为单位
 opensendtime: true #开启循环播报封禁人数
 ban-list: []
+muted: #后续功能，暂未开放
