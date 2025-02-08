@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.leng.LengbanList;
 import org.leng.object.BanEntry;
+import org.leng.manager.ModelManager;
 import org.leng.utils.TimeUtils;
 import org.leng.utils.Utils;
 
@@ -19,7 +20,6 @@ public class LengbanListCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
-        // 默认情况下，显示帮助信息
         if (args.length == 0) {
             showHelp(sender);
             return true;
@@ -86,6 +86,18 @@ public class LengbanListCommand extends Command {
                 }
                 showHelp(sender);
                 break;
+            case "model":
+                if (!sender.hasPermission("lengbanlist.model")) {
+                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    return true;
+                }
+                if (args.length < 2) {
+                    Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式/lban model <模型名称>");
+                    Utils.sendMessage(sender, plugin.prefix() + "§6§l可用模型： §b胡桃_Hu_Tao 芙宁娜_Fu_Ningna ");
+                    return true;
+                }
+                ModelManager.switchModel(args[1]);
+                break;
             default:
                 Utils.sendMessage(sender, "未知的子命令。");
                 break;
@@ -93,10 +105,6 @@ public class LengbanListCommand extends Command {
         return true;
     }
 
-    /**
-     * 显示封禁列表的方法
-     * @param sender
-     */
     private void showBanList(CommandSender sender) {
         Utils.sendMessage(sender, "§7--§bLengbanList§7--");
         for (BanEntry entry : LengbanList.getInstance().banManager.getBanList()) {
@@ -104,20 +112,7 @@ public class LengbanListCommand extends Command {
         }
     }
 
-    /**
-     * 显示帮助信息的方法
-     * @param sender
-     */
     private void showHelp(CommandSender sender) {
-        Utils.sendMessage(sender, "§bLengbanList §2§o帮助信息:");
-        Utils.sendMessage(sender, "§b§l/lban list - §3§o显示封禁列表");
-        Utils.sendMessage(sender, "§b§l/lban a - §3§o立即广播当前封禁人数");
-        Utils.sendMessage(sender, "§b§l/lban toggle - §3§o开启/关闭 自动广播)");
-        Utils.sendMessage(sender, "§b§l/lban reload - §3§o重载插件配置");
-        Utils.sendMessage(sender, "§b§l/lban add <玩家名> <天数> <原因> - §3§o添加封禁");
-        Utils.sendMessage(sender, "§b§l/lban remove <玩家名> - §3§o移除封禁");
-        Utils.sendMessage(sender, "§b§l/lban help - §3§o显示帮助信息");
-        String model = plugin.getConfig().getString("Model", "胡桃 Hu Tao"); // 使用默认值防止配置文件中没有Model字段
-        Utils.sendMessage(sender, "§6当前版本: 1.3.2 Model:" + model);
+        ModelManager.getCurrentModel().showHelp(sender);
     }
 }
