@@ -5,7 +5,7 @@
 
     <groupId>org.leng</groupId>
     <artifactId>LengbanList</artifactId>
-    <version>1.3-SNAPSHOT-fix-1</version>
+    <version>1.3.2-SNAPSHOT</version>
 
     <name>LengbanList</name>
     <url>http://www.cfcmc.online</url> 
@@ -59,7 +59,7 @@
 
     <build>
         <defaultGoal>clean package</defaultGoal>
-        <finalName>Lengbanlist - 1.3 - fix - 1</finalName>
+        <finalName>Lengbanlist - 1.3.2</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
