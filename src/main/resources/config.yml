@@ -4,4 +4,5 @@ sendtime: 5 #已分钟为单位
 opensendtime: true #开启循环播报封禁人数
 ban-list: []
 muted: #后续功能，暂未开放
-Model: "胡桃 Hu Tao" #可根据需要选择，虽然目前没有个性化的功能~，默认为胡桃 Hu Tao
+Model: "胡桃_Hu_Tao"
+valid-models: "胡桃_Hu_Tao,芙宁娜_Fu_Ningna"
