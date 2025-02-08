@@ -28,7 +28,9 @@ public class LengbanList extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getServer().getConsoleSender().sendMessage(prefix() + "§f§2正在加载");
+        getServer().getConsoleSender().sendMessage(prefix() + "§f§2正在加载原神");
+        String model = getConfig().getString("Model", "胡桃 Hu Tao"); // 默认值为“胡桃 Hu Tao”，防止配置文件中没有Model字段
+        getServer().getConsoleSender().sendMessage(prefix() + "§f§2传送锚点已解锁，当前Model: " + model);
         getServer().getPluginManager().registerEvents(new Listener(), this);
         getCommandMap().register("", new LengbanListCommand("lban", this));
         getCommandMap().register("", new BanCommand());
@@ -41,19 +43,20 @@ public class LengbanList extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(" §6|______\\___|_| |_\\__, |____/ \\__,_|_| |_|______|_|___/\\__|");
         getServer().getConsoleSender().sendMessage("§b                   __/ |                                    ");
         getServer().getConsoleSender().sendMessage("§f                   |___/                                     ");
-        getServer().getConsoleSender().sendMessage("§b当前运行版本：v1.3 - fix - 1");
+        getServer().getConsoleSender().sendMessage("§b当前运行版本：v1.3.2");
+        getServer().getConsoleSender().sendMessage("§b当前运行在：" + Bukkit.getServer().getVersion());
+        getServer().getConsoleSender().sendMessage("§b赞助获得更多福利:https://afdian.com/a/lengbanlist");
         new Metrics(this, 24495);
         GitHubUpdateChecker.checkUpdata();
         if (isBroadcast){
-            task = new BroadCastBanCountMessage().runTaskTimer(LengbanList.getInstance(), 0L, getConfig().getInt("sendtime")*1200L);
-        }
+        task = new BroadCastBanCountMessage().runTaskTimer(LengbanList.getInstance(), 0L, getConfig().getInt("sendtime")*1200L);
     }
+}
 
     @Override
     public void onDisable() {
         getServer().getConsoleSender().sendMessage(prefix() + "§4正在卸载");
         getServer().getConsoleSender().sendMessage(prefix() + "§f期待我们的下一次相遇！");
-        getServer().getConsoleSender().sendMessage("§f推荐检查新版本在:https://github.com/xiaoshaziYA/Lengbanlist");
     }
 
     public String prefix() {
