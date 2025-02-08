@@ -117,6 +117,7 @@ public class LengbanListCommand extends Command {
         Utils.sendMessage(sender, "§b§l/lban add <玩家名> <天数> <原因> - §3§o添加封禁");
         Utils.sendMessage(sender, "§b§l/lban remove <玩家名> - §3§o移除封禁");
         Utils.sendMessage(sender, "§b§l/lban help - §3§o显示帮助信息");
-        Utils.sendMessage(sender, "§6当前版本: 1.3 - fix - 1");
+        String model = plugin.getConfig().getString("Model", "胡桃 Hu Tao"); // 使用默认值防止配置文件中没有Model字段
+        Utils.sendMessage(sender, "§6当前版本: 1.3.2 Model:" + model);
     }
 }
