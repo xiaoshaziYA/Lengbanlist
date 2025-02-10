@@ -1,5 +1,5 @@
 # Lengbanlist 插件
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/317d2f452cdd55224c3e3fe2dd776fa87ddf2974/Photos/Lengbanlist.png)
+![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/Lengbanlist.png)
 ![Lengbanlist](https://bstats.org/signatures/bukkit/Lengbanlist.svg)
 
 ## 简介
