@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.leng.LengbanList;
 import org.leng.object.BanEntry;
 import org.leng.manager.ModelManager;
+import org.leng.models.Model;
 import org.leng.utils.TimeUtils;
 import org.leng.utils.Utils;
 
@@ -20,8 +21,9 @@ public class LengbanListCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
+        Model currentModel = ModelManager.getCurrentModel();
         if (args.length == 0) {
-            showHelp(sender);
+            currentModel.showHelp(sender);
             return true;
         }
 
@@ -31,7 +33,9 @@ public class LengbanListCommand extends Command {
                     Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
                     return true;
                 }
-                Utils.sendMessage(sender, LengbanList.getInstance().toggleBroadcast());
+                boolean enabled = !LengbanList.getInstance().isBroadcastEnabled();
+                LengbanList.getInstance().setBroadcastEnabled(enabled);
+                Utils.sendMessage(sender, currentModel.toggleBroadcast(enabled));
                 break;
             case "a":
                 if (!sender.hasPermission("lengbanlist.broadcast")) {
@@ -53,7 +57,7 @@ public class LengbanListCommand extends Command {
                     return true;
                 }
                 plugin.reloadConfig();
-                Utils.sendMessage(sender, plugin.prefix() + "§a配置已重新加载。");
+                Utils.sendMessage(sender, currentModel.reloadConfig());
                 break;
             case "add":
                 if (!sender.hasPermission("lengbanlist.ban")) {
@@ -65,7 +69,7 @@ public class LengbanListCommand extends Command {
                     return true;
                 }
                 LengbanList.getInstance().banManager.banPlayer(new BanEntry(args[1], sender.getName(), TimeUtils.generateTimestampFromDays(Integer.valueOf(args[2])), args[3]));
-                Utils.sendMessage(sender, "§a成功封禁" + args[1]);
+                Utils.sendMessage(sender, currentModel.addBan(args[1], Integer.valueOf(args[2]), args[3]));
                 break;
             case "remove":
                 if (!sender.hasPermission("lengbanlist.unban")) {
@@ -77,14 +81,14 @@ public class LengbanListCommand extends Command {
                     return true;
                 }
                 LengbanList.getInstance().banManager.unbanPlayer(args[1]);
-                Utils.sendMessage(sender, "§a成功解封" + args[1]);
+                Utils.sendMessage(sender, currentModel.removeBan(args[1]));
                 break;
             case "help":
                 if (!sender.hasPermission("lengbanlist.help")) {
                     Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
                     return true;
                 }
-                showHelp(sender);
+                currentModel.showHelp(sender);
                 break;
             case "model":
                 if (!sender.hasPermission("lengbanlist.model")) {
@@ -93,10 +97,22 @@ public class LengbanListCommand extends Command {
                 }
                 if (args.length < 2) {
                     Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式/lban model <模型名称>");
-                    Utils.sendMessage(sender, plugin.prefix() + "§6§l可用模型： §b胡桃_Hu_Tao 芙宁娜_Fu_Ningna ");
+                    Utils.sendMessage(sender, plugin.prefix() + "§6§l可用模型： §bHuTao FuNingna Zhongli Keqing Xiao Ayaka");
                     return true;
                 }
-                ModelManager.switchModel(args[1]);
+                String modelName = args[1];
+                if (!LengbanList.getInstance().getConfig().getString("valid-models").contains(modelName)) {
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不支持的模型名称。可用模型： §bHuTao FuNingna Zhongli Keqing Xiao Ayaka");
+                    return true;
+                }
+                // 更新配置文件中的 Model 字段
+                LengbanList.getInstance().getConfig().set("Model", modelName);
+                LengbanList.getInstance().saveConfig();
+                // 重新加载配置
+                LengbanList.getInstance().reloadConfig();
+                // 加载新的模型
+                ModelManager.loadModel(modelName);
+                Utils.sendMessage(sender, plugin.prefix() + "§a已切换到模型: " + modelName);
                 break;
             default:
                 Utils.sendMessage(sender, "未知的子命令。");
@@ -110,9 +126,5 @@ public class LengbanListCommand extends Command {
         for (BanEntry entry : LengbanList.getInstance().banManager.getBanList()) {
             Utils.sendMessage(sender, "§9§o被封禁者: " + entry.getTarget() + " §6处理人: " + entry.getStaff() + " §d封禁时间: " + TimeUtils.timestampToReadable(entry.getTime()) + " §l§n封禁原因: " + entry.getReason());
         }
-    }
-
-    private void showHelp(CommandSender sender) {
-        ModelManager.getCurrentModel().showHelp(sender);
     }
 }
