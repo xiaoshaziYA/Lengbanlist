@@ -17,7 +17,7 @@ public class LengbanList extends JavaPlugin {
     private static LengbanList instance;
     public BanManager banManager;
     public BukkitTask task;
-    public boolean isBroadcast;
+    private boolean isBroadcast;
 
     @Override
     public void onLoad() {
@@ -30,7 +30,7 @@ public class LengbanList extends JavaPlugin {
     @Override
     public void onEnable() {
         getServer().getConsoleSender().sendMessage(prefix() + "§f§2正在加载原神");
-        String modelName = getConfig().getString("Model", "胡桃_Hu_Tao");
+        String modelName = getConfig().getString("Model", "HuTao");
         ModelManager.loadModel(modelName);
         getServer().getConsoleSender().sendMessage(prefix() + "§f§2传送锚点已解锁，当前Model: " + ModelManager.getCurrentModelName());
         getServer().getPluginManager().registerEvents(new Listener(), this);
@@ -45,7 +45,7 @@ public class LengbanList extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(" §6|______\\___|_| |_\\__, |____/ \\__,_|_| |_|______|_|___/\\__|");
         getServer().getConsoleSender().sendMessage("§b                   __/ |                                    ");
         getServer().getConsoleSender().sendMessage("§f                   |___/                                     ");
-        getServer().getConsoleSender().sendMessage("§b当前运行版本：v1.3.3");
+        getServer().getConsoleSender().sendMessage("§b当前运行版本：v1.3.4");
         getServer().getConsoleSender().sendMessage("§b当前运行在：" + Bukkit.getServer().getVersion());
         getServer().getConsoleSender().sendMessage("§b赞助获得更多福利:https://afdian.com/a/lengbanlist");
         new Metrics(this, 24495);
@@ -81,14 +81,23 @@ public class LengbanList extends JavaPlugin {
         return commandMap;
     }
 
-    public String toggleBroadcast() {
+    public boolean isBroadcastEnabled() {
+        return isBroadcast;
+    }
+
+    public void setBroadcastEnabled(boolean broadcastEnabled) {
+        this.isBroadcast = broadcastEnabled;
         if (isBroadcast) {
-            isBroadcast = false;
-            task.cancel();
-        } else {
-            isBroadcast = true;
             task = new BroadCastBanCountMessage().runTaskTimer(LengbanList.getInstance(), 0L, getConfig().getInt("sendtime") * 1200L);
+        } else {
+            if (task != null) {
+                task.cancel();
+            }
         }
-        return isBroadcast ? "§a已开启" : "§c已关闭";
+    }
+
+    public String toggleBroadcast() {
+        setBroadcastEnabled(!isBroadcastEnabled());
+        return isBroadcastEnabled() ? "§a已开启" : "§c已关闭";
     }
 }
