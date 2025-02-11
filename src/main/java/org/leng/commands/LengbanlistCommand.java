@@ -102,7 +102,7 @@ public class LengbanlistCommand extends Command {
                 }
                 String modelName = args[1];
                 if (!Lengbanlist.getInstance().getConfig().getString("valid-models").contains(modelName)) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c不支持的模型名称。可用模型： §b DefaultHuTao FuNingna Zhongli Keqing Xiao Ayaka");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不支持的模型名称。可用模型： §b Default HuTao FuNingna Zhongli Keqing Xiao Ayaka");
                     return true;
                 }
                 ModelManager.getInstance().switchModel(modelName);
