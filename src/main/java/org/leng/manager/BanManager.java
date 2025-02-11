@@ -2,7 +2,8 @@ package org.leng.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.leng.LengbanList;
+import org.leng.Lengbanlist;
+import org.leng.models.Model;
 import org.leng.object.BanEntry;
 import org.leng.utils.TimeUtils;
 
@@ -12,30 +13,49 @@ import java.util.List;
 public class BanManager {
 
     public void banPlayer(BanEntry banEntry) {
-        String ban = banEntry.toString();
-        List<String> banList = LengbanList.getInstance().getConfig().getStringList("ban-list");
-        banList.add(ban);
-        LengbanList.getInstance().getConfig().set("ban-list", banList);
-        LengbanList.getInstance().saveConfig();
-        Player targetPlayer = Bukkit.getPlayer(banEntry.getTarget());
-        if (targetPlayer != null) {
-            targetPlayer.kickPlayer("§c§l您已被 " + banEntry.getStaff() + " §c§l封禁，§c§l原因："+banEntry.getReason()+" " + TimeUtils.timestampToReadable(banEntry.getTime()));
+        Model currentModel = Lengbanlist.getInstance().getModelManager().getCurrentModel();
+        String banResult = currentModel.addBan(banEntry.getTarget(), (int) ((banEntry.getTime() - System.currentTimeMillis()) / (1000 * 60 * 60 * 24)), banEntry.getReason());
+        
+        if (banResult != null && !banResult.isEmpty()) {
+            String ban = banEntry.toString();
+            List<String> banList = Lengbanlist.getInstance().getConfig().getStringList("ban-list");
+            banList.add(ban);
+            Lengbanlist.getInstance().getConfig().set("ban-list", banList);
+            Lengbanlist.getInstance().saveConfig();
+            Player targetPlayer = Bukkit.getPlayer(banEntry.getTarget());
+            if (targetPlayer != null) {
+                targetPlayer.kickPlayer(banResult); // 使用模型返回的封禁提示
+            }
+            Bukkit.broadcastMessage(banResult); // 广播封禁信息
+        } else {
+            // 修改失败警告信息，包含当前模型名称
+            String modelName = Lengbanlist.getInstance().getModelManager().getCurrentModelName();
+            Bukkit.getLogger().warning("通过模型 [" + modelName + "] 封禁玩家 [" + banEntry.getTarget() + "] 失败！");
         }
-        Bukkit.broadcastMessage(banEntry.getTarget() + " §c§l已被 " + banEntry.getStaff() + " §c§l封禁，§c§l原因：" + banEntry.getReason() + " " +  "封禁到：" + TimeUtils.timestampToReadable(banEntry.getTime()));
     }
 
     public void unbanPlayer(String target) {
-        List<String> banList = LengbanList.getInstance().getConfig().getStringList("ban-list");
-        for (int i = 0; i < banList.size(); i++) {
-            String entry = banList.get(i);
-            String[] parts = entry.split(":");
-            if (parts[0].equals(target)) {
-                banList.remove(i);
-                break;
+        Model currentModel = Lengbanlist.getInstance().getModelManager().getCurrentModel();
+        String unbanResult = currentModel.removeBan(target);
+        
+        if (unbanResult != null && !unbanResult.isEmpty()) {
+            List<String> banList = Lengbanlist.getInstance().getConfig().getStringList("ban-list");
+            for (int i = 0; i < banList.size(); i++) {
+                String entry = banList.get(i);
+                String[] parts = entry.split(":");
+                if (parts[0].equals(target)) {
+                    banList.remove(i);
+                    break;
+                }
             }
+            Lengbanlist.getInstance().getConfig().set("ban-list", banList);
+            Lengbanlist.getInstance().saveConfig();
+            Bukkit.broadcastMessage(unbanResult); // 广播解封信息
+        } else {
+            // 修改失败警告信息，包含当前模型名称
+            String modelName = Lengbanlist.getInstance().getModelManager().getCurrentModelName();
+            Bukkit.getLogger().warning("通过模型 [" + modelName + "] 解封玩家 [" + target + "] 失败！");
         }
-        LengbanList.getInstance().getConfig().set("ban-list", banList);
-        LengbanList.getInstance().saveConfig();
     }
 
     public BanEntry getBanEntry(String target) {
@@ -48,7 +68,7 @@ public class BanManager {
     }
 
     public boolean isPlayerBanned(String target) {
-        List<String> banList = LengbanList.getInstance().getConfig().getStringList("ban-list");
+        List<String> banList = Lengbanlist.getInstance().getConfig().getStringList("ban-list");
         for (String entry : banList) {
             String[] parts = entry.split(":");
             if (parts[0].equals(target)) {
@@ -59,7 +79,7 @@ public class BanManager {
     }
 
     public List<BanEntry> getBanList() {
-        List<String> banListStrings = LengbanList.getInstance().getConfig().getStringList("ban-list");
+        List<String> banListStrings = Lengbanlist.getInstance().getConfig().getStringList("ban-list");
         List<BanEntry> banList = new ArrayList<>();
         for (String entry : banListStrings) {
             String[] parts = entry.split(":");
