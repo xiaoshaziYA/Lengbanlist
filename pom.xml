@@ -4,17 +4,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.leng</groupId>
-    <artifactId>LengbanList</artifactId>
-    <version>1.3.4-SNAPSHOT</version>
+    <artifactId>Lengbanlist</artifactId>
+    <version>1.3.5-SNAPSHOT</version>
 
-    <name>LengbanList</name>
+    <name>Lengbanlist</name>
     <url>http://www.cfcmc.online</url> 
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <lengbanlist.name>LengbanList</lengbanlist.name>
+        <lengbanlist.name>Lengbanlist</lengbanlist.name>
     </properties>
 
     <repositories>
@@ -59,7 +59,7 @@
 
     <build>
         <defaultGoal>clean package</defaultGoal>
-        <finalName>Lengbanlist - 1.3.4</finalName>
+        <finalName>Lengbanlist - 1.3.5</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
