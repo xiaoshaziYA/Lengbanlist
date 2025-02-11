@@ -2,14 +2,14 @@ package org.leng.utils;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.leng.LengbanList;
+import org.leng.Lengbanlist;
 
 public class Utils {
     public static void sendMessage(CommandSender sender, String message) {
         if (sender instanceof Player) {
             sender.sendMessage(message);
         } else {
-            LengbanList.getInstance().getLogger().info(message);
+            Lengbanlist.getInstance().getLogger().info(message);
         }
     }
 }

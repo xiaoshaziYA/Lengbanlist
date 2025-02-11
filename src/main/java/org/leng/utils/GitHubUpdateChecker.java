@@ -2,7 +2,7 @@ package org.leng.utils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.leng.LengbanList;
+import org.leng.Lengbanlist;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -35,11 +35,11 @@ public class GitHubUpdateChecker {
 
     public static void checkUpdata() {
         try {
-            String localVersion = LengbanList.getInstance().getDescription().getVersion();
+            String localVersion = Lengbanlist.getInstance().getDescription().getVersion();
             if (isUpdateAvailable(localVersion)) {
-                LengbanList.getInstance().getLogger().info("有新版本可用，当前版本：" + localVersion + "，最新版本：" + getLatestReleaseVersion() +" 请前往: https://github.com/xiaoshaziYA/Lengbanlist 进行更新插件");
+                Lengbanlist.getInstance().getLogger().info("有新版本可用，当前版本：" + localVersion + "，最新版本：" + getLatestReleaseVersion() +" 请前往: https://github.com/xiaoshaziYA/Lengbanlist 进行更新插件");
             } else {
-                LengbanList.getInstance().getLogger().info("当前是最新版本！");
+                Lengbanlist.getInstance().getLogger().info("当前是最新版本！");
             }
         } catch (Exception e) {
             e.printStackTrace();
