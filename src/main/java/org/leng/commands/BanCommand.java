@@ -3,7 +3,7 @@ package org.leng.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.leng.LengbanList;
+import org.leng.Lengbanlist;
 import org.leng.utils.TimeUtils;
 import org.leng.utils.Utils;
 
@@ -20,7 +20,7 @@ public class BanCommand extends Command {
                 return false;
             }
         }
-        if (LengbanList.getInstance().banManager.isPlayerBanned(args[0])){
+        if (Lengbanlist.getInstance().banManager.isPlayerBanned(args[0])){
             Utils.sendMessage(sender,"§c玩家 " + args[0] + " 已经被封禁");
             return false;
         }
@@ -41,7 +41,7 @@ public class BanCommand extends Command {
             Utils.sendMessage(sender,"§c - 1y: 年 (1 年，按 365 天计算)");
             return false;
         }
-        LengbanList.getInstance().banManager.banPlayer(
+        Lengbanlist.getInstance().banManager.banPlayer(
                 new org.leng.object.BanEntry(args[0], sender.getName(), banTimestamp, args[2])
         );
         Utils.sendMessage(sender,"§l§a成功封禁 玩家: " + args[0] + "，时长: " + args[1]);
