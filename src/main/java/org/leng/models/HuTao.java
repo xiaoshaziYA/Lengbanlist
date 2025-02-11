@@ -11,7 +11,7 @@ public class HuTao implements Model {
 
     @Override
     public void showHelp(CommandSender sender) {
-        Utils.sendMessage(sender, "§bLengbanList §2§o帮助信息 - 胡桃风格:");
+        Utils.sendMessage(sender, "§bLengbanlist §2§o帮助信息 - 胡桃风格:");
         Utils.sendMessage(sender, "§b§l/lban list - §3§o查看往生堂的黑名单！");
         Utils.sendMessage(sender, "§b§l/lban a - §3§o广播当前往生人数，看看谁又倒霉了！");
         Utils.sendMessage(sender, "§b§l/lban toggle - §3§o开启/关闭自动广播，想听就开，不想听就关！");
@@ -20,7 +20,7 @@ public class HuTao implements Model {
         Utils.sendMessage(sender, "§b§l/lban add <玩家名> <天数> <原因> - §3§o把不听话的人加入往生堂！");
         Utils.sendMessage(sender, "§b§l/lban remove <玩家名> - §3§o从往生堂名单里移除一个人，知错能改，善莫大焉！");
         Utils.sendMessage(sender, "§b§l/lban help - §3§o显示胡桃的帮助，不懂就问！");
-        Utils.sendMessage(sender, "§6当前版本: 1.3.4 Model: 胡桃 Hu Tao");
+        Utils.sendMessage(sender, "§6当前版本: 1.3.5 Model: 胡桃 Hu Tao");
     }
 
     public String toggleBroadcast(boolean enabled) {
