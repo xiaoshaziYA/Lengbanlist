@@ -3,8 +3,8 @@ package org.leng.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.leng.Lengbanlist;
 import org.leng.utils.Utils;
+import org.leng.Lengbanlist;
 
 import java.util.Arrays;
 

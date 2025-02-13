@@ -9,7 +9,7 @@ public class Utils {
         if (sender instanceof Player) {
             sender.sendMessage(message);
         } else {
-            Lengbanlist.getInstance().getLogger().info(message);
+            Lengbanlist.getInstance().getServer().getConsoleSender().sendMessage(message);
         }
     }
 }
