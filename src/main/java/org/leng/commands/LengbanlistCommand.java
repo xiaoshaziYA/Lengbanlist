@@ -1,9 +1,14 @@
 package org.leng.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
 import org.leng.Lengbanlist;
 import org.leng.object.BanEntry;
 import org.leng.manager.ModelManager;
@@ -11,13 +16,10 @@ import org.leng.models.Model;
 import org.leng.utils.TimeUtils;
 import org.leng.utils.Utils;
 import org.leng.utils.SaveIP;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class LengbanlistCommand extends Command {
 
@@ -162,6 +164,10 @@ public class LengbanlistCommand extends Command {
     private void openChestUI(Player player) {
         Inventory chest = Bukkit.createInventory(null, 9, "§bLengbanlist");
 
+        // 创建玩家头像
+        ItemStack playerHead = createPlayerHead(player);
+        chest.setItem(0, playerHead);
+
         // 创建按钮
         ItemStack toggleBroadcast = createItem(
                 "§a切换自动广播 (" + (Lengbanlist.getInstance().isBroadcastEnabled() ? "开启" : "关闭") + ")",
@@ -177,24 +183,34 @@ public class LengbanlistCommand extends Command {
         ItemStack model = createItem(
                 "§a切换模型 (" + ModelManager.getInstance().getCurrentModelName() + ")",
                 "§7/lban model",
-                "§7切换不同的风格模型"
+                "§7随机切换不同的风格模型"
         );
         ItemStack openUI = createItem("§a打开UI", "§7/lban open", "§7打开可视化操作界面");
-        ItemStack getIP = createItem("§a获取玩家IP", "§7/lban getip", "§7获取指定玩家的IP地址");
 
         // 添加按钮到 Chest
-        chest.setItem(0, toggleBroadcast);
-        chest.setItem(1, broadcast);
-        chest.setItem(2, list);
-        chest.setItem(3, reload);
-        chest.setItem(4, add);
-        chest.setItem(5, remove);
-        chest.setItem(6, help);
-        chest.setItem(7, model);
-        chest.setItem(8, openUI);
+        chest.setItem(1, toggleBroadcast);
+        chest.setItem(2, broadcast);
+        chest.setItem(3, list);
+        chest.setItem(4, reload);
+        chest.setItem(5, add);
+        chest.setItem(6, remove);
+        chest.setItem(7, help);
+        chest.setItem(8, model);
 
         // 打开 Chest
         player.openInventory(chest);
+    }
+
+    private ItemStack createPlayerHead(Player player) {
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        meta.setOwningPlayer(player);
+        List<String> lore = new ArrayList<>();
+        lore.add("§7Lengbanlist 欢迎您，玩家ID: " + player.getUniqueId());
+        meta.setLore(lore);
+        meta.setDisplayName("§a玩家: " + player.getName());
+        item.setItemMeta(meta);
+        return item;
     }
 
     private ItemStack createItem(String displayName, String command, String description) {
