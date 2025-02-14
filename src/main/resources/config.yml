@@ -5,7 +5,7 @@ opensendtime: true #开启循环播报封禁人数
 ban-list: []
 muted: #后续功能，暂未开放
 Model: "Default"
-valid-models: "Default HuTao FuNingna Zhongli Keqing Xiao Ayaka"
+valid-models: "Default HuTao Furina Zhongli Keqing Xiao Ayaka"
 #-->关于本插件【Lengbanlist】，您需要知悉的：
 #1.本插件在Github上开源：https://github.com/xiaoshaziYA/Lengbanlist
 #2.本插件功能上绝对免费，此插件禁止倒卖，一经发现，严肃处理
