@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.leng.Lengbanlist;
@@ -164,9 +163,9 @@ public class LengbanlistCommand extends Command {
     private void openChestUI(Player player) {
         Inventory chest = Bukkit.createInventory(null, 9, "§bLengbanlist");
 
-        // 创建玩家头像
-        ItemStack playerHead = createPlayerHead(player);
-        chest.setItem(0, playerHead);
+        // 创建一朵花（彩虹色的）
+        ItemStack flower = createFlower();
+        chest.setItem(0, flower);
 
         // 创建按钮
         ItemStack toggleBroadcast = createItem(
@@ -201,18 +200,24 @@ public class LengbanlistCommand extends Command {
         player.openInventory(chest);
     }
 
-    private ItemStack createPlayerHead(Player player) {
-        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwningPlayer(player);
+    // 创建一朵花（彩虹色的）
+    private ItemStack createFlower() {
+        ItemStack flower = new ItemStack(Material.POPPY); // 使用一朵花（例如蒲公英）
+        ItemMeta meta = flower.getItemMeta();
+
+        // 设置彩虹色的名称
+        meta.setDisplayName("§cL§6e§eg§2b§3a§bn§5l§dst §d欢§2迎§3您§6的§c使§5用");
+
+        // 设置描述（猫的颜文字）
         List<String> lore = new ArrayList<>();
-        lore.add("§7Lengbanlist 欢迎您，玩家ID: " + player.getUniqueId());
+        lore.add("§7(=^･ｪ･^=)");
         meta.setLore(lore);
-        meta.setDisplayName("§a玩家: " + player.getName());
-        item.setItemMeta(meta);
-        return item;
+
+        flower.setItemMeta(meta);
+        return flower;
     }
 
+    // 创建按钮
     private ItemStack createItem(String displayName, String command, String description) {
         ItemStack item = new ItemStack(Material.PAPER);
         ItemMeta meta = item.getItemMeta();
