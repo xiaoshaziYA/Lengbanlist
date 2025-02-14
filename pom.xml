@@ -5,7 +5,7 @@
 
     <groupId>org.leng</groupId>
     <artifactId>Lengbanlist</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.4.1-SNAPSHOT</version>
 
     <name>Lengbanlist</name>
     <url>http://www.cfcmc.online</url> 
@@ -32,7 +32,7 @@
         </repository>
         <repository>
             <id>aliyun-maven</id>
-            <url>https://maven.aliyun.com/repository/central</url>
+            <url>https://maven.aliyun.com/repository/public</url>
         </repository>
     </repositories>
 
@@ -49,7 +49,6 @@
             <version>3.0.2</version>
             <scope>compile</scope>
         </dependency>
-<!--        GSON-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -59,7 +58,7 @@
 
     <build>
         <defaultGoal>clean package</defaultGoal>
-        <finalName>Lengbanlist</finalName>
+        <finalName>Lengbanlist - 1.4.1</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
