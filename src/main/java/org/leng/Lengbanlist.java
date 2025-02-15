@@ -1,25 +1,23 @@
 package org.leng;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.leng.commands.BanCommand;
+import org.leng.commands.IPBan;
 import org.leng.commands.LengbanlistCommand;
 import org.leng.commands.UnbanCommand;
+import org.leng.listeners.AnvilGUIListener;
 import org.leng.listeners.ChestUIListener;
 import org.leng.listeners.PlayerJoinListener;
-import org.leng.listeners.AnvilGUIListener;
 import org.leng.manager.BanManager;
 import org.leng.manager.ModelManager;
 import org.leng.utils.GitHubUpdateChecker;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 
 public class Lengbanlist extends JavaPlugin {
@@ -55,6 +53,7 @@ public class Lengbanlist extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AnvilGUIListener(), this);
         getCommandMap().register("", new LengbanlistCommand("lban", this));
         getCommandMap().register("", new BanCommand());
+        getCommandMap().register("", new IPBan());
         getCommandMap().register("", new UnbanCommand());
         getServer().getConsoleSender().sendMessage("§b  _                      ____              _      _     _   ");
         getServer().getConsoleSender().sendMessage("§6 | |                    |  _ \\            | |    (_)   | |  ");
