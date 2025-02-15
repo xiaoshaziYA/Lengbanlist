@@ -21,7 +21,7 @@ public class IPBan extends Command {
             }
         }
         String ip;
-        if (Utils.isValidIPAddress(args[0])){
+        if (!Utils.isValidIPAddress(args[0])){
             ip = SaveIP.getIP(sender.getName());
         } else {
             ip = args[0];
