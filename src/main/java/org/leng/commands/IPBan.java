@@ -23,6 +23,10 @@ public class IPBan extends Command {
         String ip;
         if (!Utils.isValidIPAddress(args[0])){
             ip = SaveIP.getIP(sender.getName());
+            if (ip == null) {
+                sender.sendMessage("§c§l查询不到玩家 " + sender.getName() + " 的 IP 地址");
+                return false;
+            }
         } else {
             ip = args[0];
         }
