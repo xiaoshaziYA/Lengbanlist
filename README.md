@@ -77,5 +77,11 @@ Special thanks to: darkpath2011
 
 ![Lengbanlist](https://bstats.org/signatures/bukkit/Lengbanlist.svg)  
 
-If you find this plugin useful, consider supporting me: [Support Link](https://afdian.com/a/lengbanlist)  
-No refunds are provided. Minors are prohibited from sponsoring, and the creator will not return any sponsorship.
+# Support My Project! ❤️
+If you like my project or find it helpful, please consider supporting me! Your support will help me continue developing and maintaining my projects and motivate me to create more interesting content. Thank you!
+## Sponsorship Options
+Aifadian: Support me via Aifadian. Your contributions help me improve my projects and create more content. Support me on Aifadian
+Sponsorship Badge
+You can also support me quickly through the following badge:
+https://afdian.com/a/lengbanlist
+### Thank you for your support! ❤️
