@@ -30,8 +30,19 @@ Lengbanlist 是一款专为高版本 Minecraft 服务器设计的插件，它通
 特别感谢：darkpath2011  
 ![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/114514.gif)
 
-如果有能力可以对我赞助哦：[赞助链接](https://afdian.com/a/lengbanlist)  
-不提供退款渠道，未成年人禁止赞助，创作者不会返还赞助
+# 欢迎支持我的项目！❤️
+
+如果你喜欢我的项目，或者它对你有帮助，欢迎通过以下方式支持我！你的支持将帮助我继续开发和维护这些项目，同时也能激励我创作更多有趣的内容。
+
+## 赞助方式
+- [爱发电](https://afdian.com/a/lengbanlist)：通过爱发电支持我，你可以选择一次性打赏或每月支持，帮助我更好地进行创作和项目开发。
+
+## 赞助徽章
+你也可以通过以下徽章快速支持我：
+
+[![爱发电 Sponsor](https://img.shields.io/badge/%E7%88%B1%E5%8F%91%E7%94%B5-%E6%94%AF%E6%8C%81%E6%88%91-orange)](https://afdian.com/a/lengbanlist)
+
+感谢你的支持！❤️
 
 ---
 
