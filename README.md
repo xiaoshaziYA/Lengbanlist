@@ -83,5 +83,5 @@ If you like my project or find it helpful, please consider supporting me! Your s
 Aifadian: Support me via Aifadian. Your contributions help me improve my projects and create more content. Support me on Aifadian
 Sponsorship Badge
 You can also support me quickly through the following badge:
-https://afdian.com/a/lengbanlist
+[![爱发电 Sponsor](https://img.shields.io/badge/%E7%88%B1%E5%8F%91%E7%94%B5-%E6%94%AF%E6%8C%81%E6%88%91-orange)](https://afdian.com/a/lengbanlist)
 ### Thank you for your support! ❤️
