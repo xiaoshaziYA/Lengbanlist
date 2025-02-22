@@ -78,4 +78,11 @@ public class ModelManager {
     public Map<String, Model> getModels() {
         return models;
     }
+
+    public void reloadModel() {
+        // 重新加载当前配置中指定的模型
+        String modelName = Lengbanlist.getInstance().getConfig().getString("Model", "Default");
+        switchModel(modelName);
+        Lengbanlist.getInstance().getServer().getConsoleSender().sendMessage("§a模型已重新加载，当前模型: " + modelName);
+    }
 }
