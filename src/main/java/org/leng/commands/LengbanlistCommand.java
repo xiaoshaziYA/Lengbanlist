@@ -71,7 +71,9 @@ public class LengbanlistCommand extends Command {
                     return true;
                 }
                 plugin.reloadConfig();
-                Utils.sendMessage(sender, currentModel.reloadConfig());
+               // 重新加载模型
+               ModelManager.getInstance().reloadModel();
+               Utils.sendMessage(sender, currentModel.reloadConfig());
                 break;
             case "add":
                 if (!sender.hasPermission("lengbanlist.ban")) {
