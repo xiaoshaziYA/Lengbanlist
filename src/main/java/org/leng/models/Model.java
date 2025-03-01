@@ -18,4 +18,8 @@ public interface Model {
     String addMute(String player, String reason);
 
     String removeMute(String player);
+
+    String addBanIp(String ip, int days, String reason);
+
+    String removeBanIp(String ip);
 }

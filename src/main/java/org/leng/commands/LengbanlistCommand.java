@@ -9,8 +9,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.Listener;
 import org.leng.Lengbanlist;
 import org.leng.object.BanEntry;
+import org.leng.object.BanIpEntry;
 import org.leng.object.MuteEntry;
 import org.leng.manager.ModelManager;
 import org.leng.models.Model;
@@ -26,12 +30,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LengbanlistCommand extends Command {
+public class LengbanlistCommand extends Command implements Listener {
     private final Lengbanlist plugin;
 
     public LengbanlistCommand(String name, Lengbanlist plugin) {
         super(name);
         this.plugin = plugin;
+        Bukkit.getPluginManager().registerEvents(this, plugin); // 注册事件监听器
     }
 
     @Override
@@ -81,11 +86,18 @@ public class LengbanlistCommand extends Command {
                     return true;
                 }
                 if (args.length < 4) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式/lban add <玩家名> <天数> <原因>");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式/lban add <玩家名/IP> <时间> <原因>");
                     return true;
                 }
-                plugin.getBanManager().banPlayer(new BanEntry(args[1], sender.getName(), TimeUtils.generateTimestampFromDays(Integer.valueOf(args[2])), args[3]));
-                Utils.sendMessage(sender, currentModel.addBan(args[1], Integer.valueOf(args[2]), args[3]));
+                if (args[1].contains(".")) {
+                    // 封禁 IP
+                    plugin.getBanManager().banIp(new BanIpEntry(args[1], sender.getName(), TimeUtils.generateTimestampFromDays(Integer.valueOf(args[2])), args[3]));
+                    Utils.sendMessage(sender, currentModel.addBanIp(args[1], Integer.valueOf(args[2]), args[3]));
+                } else {
+                    // 封禁玩家
+                    plugin.getBanManager().banPlayer(new BanEntry(args[1], sender.getName(), TimeUtils.generateTimestampFromDays(Integer.valueOf(args[2])), args[3]));
+                    Utils.sendMessage(sender, currentModel.addBan(args[1], Integer.valueOf(args[2]), args[3]));
+                }
                 break;
             case "remove":
                 if (!sender.hasPermission("lengbanlist.unban")) {
@@ -93,11 +105,18 @@ public class LengbanlistCommand extends Command {
                     return true;
                 }
                 if (args.length < 2) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式/lban remove <玩家名>");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式/lban remove <玩家名/IP>");
                     return true;
                 }
-                plugin.getBanManager().unbanPlayer(args[1]);
-                Utils.sendMessage(sender, currentModel.removeBan(args[1]));
+                if (args[1].contains(".")) {
+                    // 解封 IP
+                    plugin.getBanManager().unbanIp(args[1]);
+                    Utils.sendMessage(sender, currentModel.removeBanIp(args[1]));
+                } else {
+                    // 解封玩家
+                    plugin.getBanManager().unbanPlayer(args[1]);
+                    Utils.sendMessage(sender, currentModel.removeBan(args[1]));
+                }
                 break;
             case "help":
                 if (!sender.hasPermission("lengbanlist.help")) {
@@ -169,19 +188,20 @@ public class LengbanlistCommand extends Command {
                 Utils.sendMessage(sender, plugin.prefix() + "§a已切换到模型: " + modelName);
                 break;
             case "mute":
-                if (!sender.hasPermission("lengbanlist.mute")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
-                    return true;
-                }
-                if (args.length < 3) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式 /lban mute <玩家名> <原因>");
-                    return true;
-                }
-                String targetPlayer = args[1];
-                String muteReason = args[2];
-                plugin.getMuteManager().mutePlayer(targetPlayer, sender.getName(), muteReason);
-                Utils.sendMessage(sender, currentModel.addMute(targetPlayer, muteReason));
-                break;
+    if (!sender.hasPermission("lengbanlist.mute")) {
+        Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+        return true;
+    }
+    if (args.length < 3) {
+        Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式 /lban mute <玩家名> <原因>");
+        return true;
+    }
+    String targetPlayer = args[1];
+    String muteReason = args[2];
+    MuteEntry muteEntry = new MuteEntry(targetPlayer, sender.getName(), System.currentTimeMillis(), muteReason);
+    plugin.getMuteManager().mutePlayer(muteEntry);
+    Utils.sendMessage(sender, currentModel.addMute(targetPlayer, muteReason));
+    break;
             case "list-mute":
                 if (!sender.hasPermission("lengbanlist.listmute")) {
                     Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
@@ -200,6 +220,9 @@ public class LengbanlistCommand extends Command {
         Utils.sendMessage(sender, "§7--§bLengbanlist 封禁名单§7--");
         for (BanEntry entry : plugin.getBanManager().getBanList()) {
             Utils.sendMessage(sender, "§9§o被封禁者: " + entry.getTarget() + " §6处理人: " + entry.getStaff() + " §d封禁时间: " + TimeUtils.timestampToReadable(entry.getTime()) + " §l§n封禁原因: " + entry.getReason());
+        }
+        for (BanIpEntry entry : plugin.getBanManager().getBanIpList()) {
+            Utils.sendMessage(sender, "§9§o被封禁 IP: " + entry.getIp() + " §6处理人: " + entry.getStaff() + " §d封禁时间: " + TimeUtils.timestampToReadable(entry.getTime()) + " §l§n封禁原因: " + entry.getReason());
         }
     }
 
@@ -232,8 +255,8 @@ public class LengbanlistCommand extends Command {
         ItemStack broadcast = createItem("§a广播封禁人数", "§7/lban a", "§7广播当前封禁人数", Sound.BLOCK_NOTE_BLOCK_PLING);
         ItemStack list = createItem("§a查看封禁名单", "§7/lban list", "§7查看被封禁的玩家列表", Sound.BLOCK_NOTE_BLOCK_HARP);
         ItemStack reload = createItem("§a重新加载配置", "§7/lban reload", "§7重新加载插件配置", Sound.BLOCK_NOTE_BLOCK_BELL);
-        ItemStack add = createItem("§a添加封禁", "§7/lban add", "§7添加一个玩家到封禁名单", Sound.BLOCK_NOTE_BLOCK_BASS);
-        ItemStack remove = createItem("§a移除封禁", "§7/lban remove", "§7从封禁名单中移除一个玩家", Sound.BLOCK_NOTE_BLOCK_SNARE);
+        ItemStack addBan = createItem("§a添加封禁", "§7/lban add", "§7添加一个玩家到封禁名单", Sound.BLOCK_NOTE_BLOCK_BASS);
+        ItemStack removeBan = createItem("§a解除封禁", "§7/lban remove", "§7从封禁名单中移除一个玩家", Sound.BLOCK_NOTE_BLOCK_SNARE);
         ItemStack help = createItem("§a帮助信息", "§7/lban help", "§7显示帮助信息", Sound.BLOCK_NOTE_BLOCK_FLUTE);
         ItemStack model = createItem(
                 "§a切换模型 (" + ModelManager.getInstance().getCurrentModelName() + ")",
@@ -251,8 +274,8 @@ public class LengbanlistCommand extends Command {
         chest.setItem(11, broadcast);
         chest.setItem(12, list);
         chest.setItem(13, reload);
-        chest.setItem(14, add);
-        chest.setItem(15, remove);
+        chest.setItem(14, addBan);
+        chest.setItem(15, removeBan);
         chest.setItem(16, help);
         chest.setItem(17, model);
         chest.setItem(18, mute);
@@ -319,6 +342,68 @@ public class LengbanlistCommand extends Command {
         } catch (Exception e) {
             e.printStackTrace();
             return null; // 解析失败时返回 null
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (event.getView().getTitle().equals("§bLengbanlist")) {
+            event.setCancelled(true); // 防止玩家移动物品
+
+            Player player = (Player) event.getWhoClicked();
+            ItemStack clickedItem = event.getCurrentItem();
+
+            if (clickedItem == null || !clickedItem.hasItemMeta()) {
+                return;
+            }
+
+            String command = clickedItem.getItemMeta().getLore().get(0).replace("§7", ""); // 获取按钮的命令
+
+            // 根据按钮的命令调用相应的逻辑
+            switch (command) {
+                case "/lban toggle":
+                    player.performCommand("lban toggle");
+                    break;
+                case "/lban a":
+                    player.performCommand("lban a");
+                    break;
+                case "/lban list":
+                    player.performCommand("lban list");
+                    break;
+                case "/lban reload":
+                    player.performCommand("lban reload");
+                    break;
+                case "/lban add":
+                    // 调用 ChestUIListener 打开铁砧界面
+                    plugin.getChestUIListener().openAnvilForBan(player, "playerID");
+                    break;
+                case "/lban remove":
+                    // 调用 ChestUIListener 打开铁砧界面
+                    plugin.getChestUIListener().openAnvilForUnban(player);
+                    break;
+                case "/lban help":
+                    player.performCommand("lban help");
+                    break;
+                case "/lban model":
+                    // 调用 ModelChoiceListener 打开模型选择界面
+                    ModelManager.getInstance().openModelSelectionUI(player);
+                    break;
+                case "/lban mute":
+                    // 调用 ChestUIListener 打开铁砧界面
+                    plugin.getChestUIListener().openAnvilForMute(player, "playerID");
+                    break;
+                case "/lban unmute":
+                    // 调用 ChestUIListener 打开铁砧界面
+                    plugin.getChestUIListener().openAnvilForUnmute(player);
+                    break;
+                case "/lban list-mute":
+                    player.performCommand("lban list-mute");
+                    break;
+                default:
+                    // 其他命令直接执行
+                    player.performCommand(command);
+                    break;
+            }
         }
     }
 }

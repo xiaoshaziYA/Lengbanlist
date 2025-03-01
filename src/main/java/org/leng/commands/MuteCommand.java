@@ -47,7 +47,8 @@ public class MuteCommand extends Command {
                 }
                 String target = args[1];
                 String reason = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
-                muteManager.mutePlayer(target, sender.getName(), reason);
+                MuteEntry muteEntry = new MuteEntry(target, sender.getName(), System.currentTimeMillis(), reason);
+                muteManager.mutePlayer(muteEntry);
                 Utils.sendMessage(sender, currentModel.addMute(target, reason));
                 break;
 

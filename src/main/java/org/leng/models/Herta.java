@@ -26,6 +26,8 @@ public class Herta implements Model {
         Utils.sendMessage(sender, "§b§l/lban help - §3§o显示帮助信息，不懂就问。");
         Utils.sendMessage(sender, "§b§l/lban open - §3§o打开可视化操作界面，希儿的正义领域。");
         Utils.sendMessage(sender, "§b§l/lban getIP <玩家名> - §3§o查询玩家的 IP 地址，找出违规者。");
+        Utils.sendMessage(sender, "§b§l/ban-ip <IP地址> <天数> <原因> - §3§o封禁 IP 地址，维护正义。");
+        Utils.sendMessage(sender, "§b§l/unban-ip <IP地址> - §3§o解除 IP 封禁，给予机会。");
         Utils.sendMessage(sender, "§6当前版本: " + Lengbanlist.getInstance().getPluginVersion() + " Model: 希儿 Herta");
     }
 
@@ -57,5 +59,15 @@ public class Herta implements Model {
     @Override
     public String removeMute(String player) {
         return "§b希儿说：§a玩家 " + player + " 的禁言已解除，可以继续说话了。";
+    }
+
+    @Override
+    public String addBanIp(String ip, int days, String reason) {
+        return "§b希儿说：§aIP " + ip + " 已被封禁 " + days + " 天，原因是：" + reason + "。正义不容挑战！";
+    }
+
+    @Override
+    public String removeBanIp(String ip) {
+        return "§b希儿说：§aIP " + ip + " 的封禁已解除。给予机会，重新开始。";
     }
 }

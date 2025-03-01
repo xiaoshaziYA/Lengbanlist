@@ -6,28 +6,46 @@ import org.bukkit.entity.Player;
 import org.leng.Lengbanlist;
 import org.leng.utils.Utils;
 
-import java.util.Arrays;
-
 public class UnbanCommand extends Command {
     public UnbanCommand() {
         super("unban");
-        setAliases(Arrays.asList("pardon"));
     }
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
-        if(sender instanceof Player){
+        // 检查权限
+        if (sender instanceof Player) {
             Player player = (Player) sender;
-            if (!(player.hasPermission("lengban.unban"))) {
+            if (!sender.isOp() || !(player.hasPermission("lengban.unban"))) {
+                Utils.sendMessage(sender, "§c你没有权限使用此命令。");
                 return false;
             }
         }
-        if (args.length == 0) {
-            Utils.sendMessage(sender, "§c用法错误: 请提供要解除封禁的玩家名！");
+
+        // 检查参数长度
+        if (args.length < 1) {
+            Utils.sendMessage(sender, "§c用法错误: /unban <玩家名/IP>");
             return false;
         }
-        Lengbanlist.getInstance().banManager.unbanPlayer(args[0]);
-        Utils.sendMessage(sender,"§l§a成功解除封禁 玩家: "+args[0]);
-        return false;
+
+        // 判断是解封玩家还是解封 IP
+        if (args[0].contains(".")) {
+            // 解封 IP
+            if (Lengbanlist.getInstance().banManager.isIpBanned(args[0])) {
+                Lengbanlist.getInstance().banManager.unbanIp(args[0]);
+                Utils.sendMessage(sender, "§l§a成功解封 IP: " + args[0]);
+            } else {
+                Utils.sendMessage(sender, "§cIP " + args[0] + " 未被封禁");
+            }
+        } else {
+            // 解封玩家
+            if (Lengbanlist.getInstance().banManager.isPlayerBanned(args[0])) {
+                Lengbanlist.getInstance().banManager.unbanPlayer(args[0]);
+                Utils.sendMessage(sender, "§l§a成功解封玩家: " + args[0]);
+            } else {
+                Utils.sendMessage(sender, "§c玩家 " + args[0] + " 未被封禁");
+            }
+        }
+        return true;
     }
 }

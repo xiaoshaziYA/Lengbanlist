@@ -1,18 +1,19 @@
 package org.leng.object;
 
 public class MuteEntry {
-    private String target;
-    private String staff;
-    private String reason;
-    private long time; 
+    private final String target;
+    private final String staff;
+    private final long time;
+    private final String reason;
 
-    public MuteEntry(String target, String staff, String reason) {
+    public MuteEntry(String target, String staff, long time, String reason) {
         this.target = target;
         this.staff = staff;
+        this.time = time;
         this.reason = reason;
-        this.time = System.currentTimeMillis(); // 初始化时间戳
     }
 
+    // Getters and toString method
     public String getTarget() {
         return target;
     }
@@ -21,16 +22,16 @@ public class MuteEntry {
         return staff;
     }
 
-    public String getReason() {
-        return reason;
-    }
-
     public long getTime() {
         return time;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
     @Override
     public String toString() {
-        return target + ":" + staff + ":" + reason;
+        return target + ":" + staff + ":" + time + ":" + reason;
     }
 }

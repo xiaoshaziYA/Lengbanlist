@@ -7,6 +7,7 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.leng.commands.BanCommand;
+import org.leng.commands.BanIpCommand;
 import org.leng.commands.LengbanlistCommand;
 import org.leng.commands.UnbanCommand;
 import org.leng.listeners.ChestUIListener;
@@ -25,27 +26,50 @@ import java.lang.reflect.Field;
 public class Lengbanlist extends JavaPlugin {
     private static Lengbanlist instance;
     public BanManager banManager;
-    public MuteManager muteManager; // 添加 MuteManager 实例
+    public MuteManager muteManager;
     public BukkitTask task;
     private boolean isBroadcast;
-    public FileConfiguration ipFC; // 添加 ipFC 变量
-    private ModelChoiceListener modelChoiceListener; // 添加 ModelChoiceListener 变量
+    public FileConfiguration ipFC;
+    private FileConfiguration banFC;
+    private FileConfiguration banIpFC;
+    private FileConfiguration muteFC;
+    private ModelChoiceListener modelChoiceListener;
 
     @Override
     public void onLoad() {
         saveDefaultConfig();
         instance = this;
         banManager = new BanManager();
-        muteManager = new MuteManager(); // 初始化 MuteManager
+        muteManager = new MuteManager();
         isBroadcast = getConfig().getBoolean("opensendtime");
 
         // 初始化 ipFC
         File ipFile = new File(getDataFolder(), "ip.yml");
         if (!ipFile.exists()) {
-            ipFile.getParentFile().mkdirs(); // 确保目录存在
-            saveResource("ip.yml", false); // 从插件资源中复制 ip.yml
+            ipFile.getParentFile().mkdirs();
+            saveResource("ip.yml", false);
         }
-        ipFC = YamlConfiguration.loadConfiguration(ipFile); // 加载 ip.yml
+        ipFC = YamlConfiguration.loadConfiguration(ipFile);
+
+        // 初始化 banFC 和 banIpFC
+        File banFile = new File(getDataFolder(), "ban-list.yml");
+        File banIpFile = new File(getDataFolder(), "banip-list.yml");
+        File muteFile = new File(getDataFolder(), "mute-list.yml");
+        if (!banFile.exists()) {
+            banFile.getParentFile().mkdirs();
+            saveResource("ban-list.yml", false);
+        }
+        if (!banIpFile.exists()) {
+            banIpFile.getParentFile().mkdirs();
+            saveResource("banip-list.yml", false);
+        }
+        if (!muteFile.exists()) {
+            muteFile.getParentFile().mkdirs();
+            saveResource("mute-list.yml", false);
+        }
+        banFC = YamlConfiguration.loadConfiguration(banFile);
+        banIpFC = YamlConfiguration.loadConfiguration(banIpFile);
+        muteFC = YamlConfiguration.loadConfiguration(muteFile);
     }
 
     @Override
@@ -56,8 +80,8 @@ public class Lengbanlist extends JavaPlugin {
 
         // 注册监听器
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
-        getServer().getPluginManager().registerEvents(new ChestUIListener(this), this); 
-        getServer().getPluginManager().registerEvents(new AnvilGUIListener(this), this); // 修复：传入 this
+        getServer().getPluginManager().registerEvents(new ChestUIListener(this), this);
+        getServer().getPluginManager().registerEvents(new AnvilGUIListener(this), this);
 
         // 初始化 ModelChoiceListener
         modelChoiceListener = new ModelChoiceListener(this);
@@ -66,7 +90,9 @@ public class Lengbanlist extends JavaPlugin {
         // 注册命令
         getCommandMap().register("", new LengbanlistCommand("lban", this));
         getCommandMap().register("", new BanCommand());
+        getCommandMap().register("", new BanIpCommand());
         getCommandMap().register("", new UnbanCommand());
+        getCommandMap().register("", new BanIpCommand()); 
 
         getServer().getConsoleSender().sendMessage("§b  _                      ____              _      _     _   ");
         getServer().getConsoleSender().sendMessage("§6 | |                    |  _ \\            | |    (_)   | |  ");
@@ -134,28 +160,62 @@ public class Lengbanlist extends JavaPlugin {
         return isBroadcastEnabled() ? "§a已开启" : "§c已关闭";
     }
 
-    // 获取 ModelManager 的方法
     public ModelManager getModelManager() {
         return ModelManager.getInstance();
     }
 
-    // 获取插件版本号
     public String getPluginVersion() {
         return getDescription().getVersion();
     }
 
-    // 获取 BanManager 的方法
     public BanManager getBanManager() {
         return banManager;
     }
 
-    // 获取 MuteManager 的方法
     public MuteManager getMuteManager() {
         return muteManager;
     }
 
-    // 获取 ModelChoiceListener 的方法
     public ModelChoiceListener getModelChoiceListener() {
         return modelChoiceListener;
+    }
+
+    public FileConfiguration getBanFC() {
+        return banFC;
+    }
+
+    public FileConfiguration getBanIpFC() {
+        return banIpFC;
+    }
+
+    public FileConfiguration getMuteFC() {
+        return muteFC;
+    }
+
+    public void saveBanConfig() {
+        try {
+            banFC.save(new File(getDataFolder(), "ban-list.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveBanIpConfig() {
+        try {
+            banIpFC.save(new File(getDataFolder(), "banip-list.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveMuteConfig() {
+        try {
+            muteFC.save(new File(getDataFolder(), "mute-list.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public ChestUIListener getChestUIListener() {
+    return new ChestUIListener(this);
     }
 }

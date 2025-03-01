@@ -26,6 +26,8 @@ public class Zhongli implements Model {
         Utils.sendMessage(sender, "§b§l/lban help - §3§o显示帮助信息，优雅地解决问题。");
         Utils.sendMessage(sender, "§b§l/lban open - §3§o打开可视化操作界面，钟离带你看看秩序的力量！");
         Utils.sendMessage(sender, "§b§l/lban getIP <玩家名> - §3§o查询玩家的 IP 地址，维护秩序。");
+        Utils.sendMessage(sender, "§b§l/ban-ip <IP地址> <天数> <原因> - §3§o封禁 IP 地址，维护秩序。");
+        Utils.sendMessage(sender, "§b§l/unban-ip <IP地址> - §3§o解除 IP 封禁，宽恕是美德。");
         Utils.sendMessage(sender, "§6当前版本: " + Lengbanlist.getInstance().getPluginVersion() + " Model: 钟离 Zhongli");
     }
 
@@ -41,21 +43,31 @@ public class Zhongli implements Model {
 
     @Override
     public String addBan(String player, int days, String reason) {
-        return "§b钟离说：§a" + player + " 已被封禁 " + days + " 天，原因是：" + reason + "。秩序不容破坏。";
+        return "§b钟离说：§a玩家 " + player + " 已被封禁 " + days + " 天，原因是：" + reason + "。秩序不容破坏。";
     }
 
     @Override
     public String removeBan(String player) {
-        return "§b钟离说：§a" + player + " 已从封禁名单中移除。宽恕是美德。";
+        return "§b钟离说：§a玩家 " + player + " 已从封禁名单中移除。宽恕是美德。";
     }
 
     @Override
     public String addMute(String player, String reason) {
-        return "§b钟离说：§a" + player + " 已被禁言，原因是：" + reason + "。秩序不容破坏。";
+        return "§b钟离说：§a玩家 " + player + " 已被禁言，原因是：" + reason + "。秩序不容破坏。";
     }
 
     @Override
     public String removeMute(String player) {
-        return "§b钟离说：§a" + player + " 的禁言已解除。宽恕是美德。";
+        return "§b钟离说：§a玩家 " + player + " 的禁言已解除。宽恕是美德。";
+    }
+
+    @Override
+    public String addBanIp(String ip, int days, String reason) {
+        return "§b钟离说：§aIP " + ip + " 已被封禁 " + days + " 天，原因是：" + reason + "。秩序不容破坏。";
+    }
+
+    @Override
+    public String removeBanIp(String ip) {
+        return "§b钟离说：§aIP " + ip + " 的封禁已解除。宽恕是美德。";
     }
 }

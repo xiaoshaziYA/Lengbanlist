@@ -26,6 +26,8 @@ public class Default implements Model {
         Utils.sendMessage(sender, "§b§l/lban help - §3§o显示帮助信息");
         Utils.sendMessage(sender, "§b§l/lban open - §3§o打开可视化操作界面");
         Utils.sendMessage(sender, "§b§l/lban getIP <玩家名> - §3§o查询玩家的 IP 地址");
+        Utils.sendMessage(sender, "§b§l/ban-ip <IP地址> <天数> <原因> - §3§o封禁 IP 地址");
+        Utils.sendMessage(sender, "§b§l/unban-ip <IP地址> - §3§o解除 IP 封禁");
         Utils.sendMessage(sender, "§6当前版本: " + Lengbanlist.getInstance().getPluginVersion() + " Model: 默认 Default");
     }
 
@@ -57,5 +59,15 @@ public class Default implements Model {
     @Override
     public String removeMute(String player) {
         return "§b默认模型：§a玩家 " + player + " 的禁言已解除";
+    }
+
+    @Override
+    public String addBanIp(String ip, int days, String reason) {
+        return "§b默认模型：§aIP " + ip + " 已被封禁 " + days + " 天，原因是：" + reason;
+    }
+
+    @Override
+    public String removeBanIp(String ip) {
+        return "§b默认模型：§aIP " + ip + " 的封禁已解除";
     }
 }

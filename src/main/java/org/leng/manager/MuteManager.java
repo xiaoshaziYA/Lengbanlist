@@ -1,5 +1,6 @@
 package org.leng.manager;
 
+import org.bukkit.Bukkit;
 import org.leng.Lengbanlist;
 import org.leng.object.MuteEntry;
 
@@ -7,28 +8,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MuteManager {
-    private List<MuteEntry> muteList;
-
-    public MuteManager() {
-        muteList = new ArrayList<>();
+    // 禁言玩家
+    public void mutePlayer(MuteEntry muteEntry) {
+        String mute = muteEntry.toString();
+        List<String> muteList = Lengbanlist.getInstance().getMuteFC().getStringList("mute-list");
+        muteList.add(mute);
+        Lengbanlist.getInstance().getMuteFC().set("mute-list", muteList);
+        Lengbanlist.getInstance().saveMuteConfig();
+        Bukkit.broadcastMessage("§a玩家 " + muteEntry.getTarget() + " 已被禁言，原因：" + muteEntry.getReason());
     }
 
-    public void mutePlayer(String target, String staff, String reason) {
-        MuteEntry muteEntry = new MuteEntry(target, staff, reason);
-        muteList.add(muteEntry);
-        Lengbanlist.getInstance().getLogger().info("玩家 " + target + " 被禁言，原因：" + reason);
-    }
-
+    // 解除禁言
     public void unmutePlayer(String target) {
-        muteList.removeIf(entry -> entry.getTarget().equalsIgnoreCase(target));
-        Lengbanlist.getInstance().getLogger().info("玩家 " + target + " 的禁言已被解除");
+        List<String> muteList = Lengbanlist.getInstance().getMuteFC().getStringList("mute-list");
+        for (int i = 0; i < muteList.size(); i++) {
+            String entry = muteList.get(i);
+            String[] parts = entry.split(":");
+            if (parts[0].equals(target)) {
+                muteList.remove(i);
+                break;
+            }
+        }
+        Lengbanlist.getInstance().getMuteFC().set("mute-list", muteList);
+        Lengbanlist.getInstance().saveMuteConfig();
+        Bukkit.broadcastMessage("§a玩家 " + target + " 已解除禁言");
     }
 
-    public boolean isMuted(String target) {
-        return muteList.stream().anyMatch(entry -> entry.getTarget().equalsIgnoreCase(target));
-    }
-
+    // 获取禁言列表
     public List<MuteEntry> getMuteList() {
+        List<String> muteListStrings = Lengbanlist.getInstance().getMuteFC().getStringList("mute-list");
+        List<MuteEntry> muteList = new ArrayList<>();
+        for (String entry : muteListStrings) {
+            String[] parts = entry.split(":");
+            if (parts.length == 4) {
+                String target = parts[0];
+                String staff = parts[1];
+                long time = Long.parseLong(parts[2]);
+                String reason = parts[3];
+                muteList.add(new MuteEntry(target, staff, time, reason));
+            }
+        }
         return muteList;
     }
 }

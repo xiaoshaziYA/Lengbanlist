@@ -26,6 +26,8 @@ public class Ayaka implements Model {
         Utils.sendMessage(sender, "§b§l/lban help - §3§o显示帮助信息，优雅地解决问题。");
         Utils.sendMessage(sender, "§b§l/lban open - §3§o打开可视化操作界面，绫华带你看看优雅的力量！");
         Utils.sendMessage(sender, "§b§l/lban getIP <玩家名> - §3§o查询玩家的 IP 地址，优雅地维护秩序。");
+        Utils.sendMessage(sender, "§b§l/ban-ip <IP地址> <天数> <原因> - §3§o封禁 IP 地址，维护秩序。");
+        Utils.sendMessage(sender, "§b§l/unban-ip <IP地址> - §3§o解除 IP 封禁，给予机会。");
         Utils.sendMessage(sender, "§6当前版本: " + Lengbanlist.getInstance().getPluginVersion() + " Model: 绫华 Ayaka");
     }
 
@@ -57,5 +59,15 @@ public class Ayaka implements Model {
     @Override
     public String removeMute(String player) {
         return "§b绫华说：§a" + player + " 的禁言已解除。给予机会，重新开始。";
+    }
+
+    @Override
+    public String addBanIp(String ip, int days, String reason) {
+        return "§b绫华说：§aIP " + ip + " 已被封禁 " + days + " 天，原因是：" + reason + "。维护秩序，不容破坏。";
+    }
+
+    @Override
+    public String removeBanIp(String ip) {
+        return "§b绫华说：§aIP " + ip + " 的封禁已解除。给予机会，重新开始。";
     }
 }
