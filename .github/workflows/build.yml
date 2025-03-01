@@ -22,61 +22,8 @@ jobs:
       - name: Build with Maven
         run: mvn clean package  # 使用Maven进行编译打包
 
-      - name: Generate unique version name
-        id: version
-        run: |
-          TIMESTAMP=$(date -u +%Y%m%d%H%M%S)
-          echo "version_name=plugin-$TIMESTAMP" >> $GITHUB_OUTPUT
-
-      - name: Rename artifact
-        run: |
-          mv target/your-artifact.jar target/${{ steps.version.outputs.version_name }}.jar
-
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.version.outputs.version_name }}  # 使用生成的唯一版本名称
-          path: target/${{ steps.version.outputs.version_name }}.jar  # 上传重命名后的构建产物
-
-      - name: Upload to storage and get download URL
-        run: |
-          # 创建存储目录
-          RESPONSE=$(curl --location --request POST "https://api.kstore.space/api/v1/file/create" \
-            --header "X-GitHub-Event: workflow_run" \
-            --header "User-Agent: Apifox/1.0.0 (https://apifox.com)" \
-            --form "access_token=${{ secrets.OSS }}" \
-            --form "fileId=0" \
-            --form "name=${{ steps.version.outputs.version_name }}")
-
-          DIR_ID=$(echo "$RESPONSE" | jq -r '.data.id')
-          echo "DirectoryId: $DIR_ID"
-
-          # 上传文件
-          UPLOAD_RESPONSE=$(curl --location --request POST "https://upload.kstore.space/upload/$DIR_ID?access_token=${{ secrets.OSS }}" \
-            -F "file=@target/${{ steps.version.outputs.version_name }}.jar")
-
-          DOWNLOAD_URL=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.downloadUrl')
-          FILE_ID=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.id')
-
-          echo "FileId: $FILE_ID"
-          echo "URL: $DOWNLOAD_URL"
-
-          # 设为直接下载
-          RESPONSE=$(curl --location --request POST "https://api.kstore.cc/api/v1/file/direct?access_token=${{ secrets.OSS }}" \
-            --form "fileId=$FILE_ID" \
-            --form "isDirect=1")
-
-          echo "$RESPONSE"
-        
-          echo "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          
-          # 版本推送
-          curl --get \
-          --data-urlencode "key=${{ secrets.API_KEY }}" \
-          --data-urlencode "commit=${{ github.sha }}" \
-          --data-urlencode "branch=${{ github.ref }}" \
-          --data-urlencode "version=${{ steps.version.outputs.version_name }}" \
-          --data-urlencode "date=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-          --data-urlencode "link=$DOWNLOAD_URL" \
-          --data-urlencode "release=false" \
-          "https://service.fpsmaster.top/pushVers"
+          name: plugin  # 构建产物的名称
+          path: target/  # Maven构建产物通常在target目录下
