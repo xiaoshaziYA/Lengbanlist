@@ -5,10 +5,9 @@
 
     <groupId>org.leng</groupId>
     <artifactId>Lengbanlist</artifactId>
-    <version>1.5.0-SNAPSHOT</version>
+    <version>1.5.1-SNAPSHOT</version>
 
     <name>Lengbanlist</name>
-    <url>http://www.cfcmc.online</url> 
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,7 +57,7 @@
 
     <build>
         <defaultGoal>clean package</defaultGoal>
-        <finalName>Lengbanlist - 1.5.0</finalName>
+        <finalName>Lengbanlist - 1.5.1</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
