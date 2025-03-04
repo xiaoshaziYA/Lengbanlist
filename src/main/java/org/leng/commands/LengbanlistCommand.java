@@ -10,8 +10,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration; 
 import org.leng.Lengbanlist;
 import org.leng.object.BanEntry;
 import org.leng.object.BanIpEntry;
@@ -22,6 +24,7 @@ import org.leng.utils.TimeUtils;
 import org.leng.utils.Utils;
 import org.leng.utils.SaveIP;
 
+import java.io.File;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.BufferedReader;
@@ -36,7 +39,7 @@ public class LengbanlistCommand extends Command implements Listener {
     public LengbanlistCommand(String name, Lengbanlist plugin) {
         super(name);
         this.plugin = plugin;
-        Bukkit.getPluginManager().registerEvents(this, plugin); // 注册事件监听器
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     @Override
@@ -62,7 +65,15 @@ public class LengbanlistCommand extends Command implements Listener {
                     Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
                     return true;
                 }
-                plugin.getServer().broadcastMessage(plugin.getConfig().getString("default-message").replace("%s", String.valueOf(plugin.getBanManager().getBanList().size())));
+                String defaultMessage = plugin.getBroadcastFC().getString("default-message");
+                int banCount = plugin.getBanManager().getBanList().size();
+                int banIpCount = plugin.getBanManager().getBanIpList().size();
+
+                String replacedMessage = defaultMessage
+                        .replace("%s", String.valueOf(banCount)) // 替换封禁玩家数量
+                        .replace("%i", String.valueOf(banIpCount)); // 替换封禁 IP 数量
+
+                plugin.getServer().broadcastMessage(replacedMessage);
                 break;
             case "list":
                 if (!sender.hasPermission("lengbanlist.list")) {
@@ -78,6 +89,8 @@ public class LengbanlistCommand extends Command implements Listener {
                 }
                 plugin.reloadConfig();
                 ModelManager.getInstance().reloadModel();
+                File broadcastFile = new File(plugin.getDataFolder(), "broadcast.yml");
+                plugin.getServer().broadcastMessage(plugin.getConfig().getString("default-message").replace("%s", String.valueOf(plugin.getBanManager().getBanList().size())));
                 Utils.sendMessage(sender, currentModel.reloadConfig());
                 break;
             case "add":
@@ -90,13 +103,11 @@ public class LengbanlistCommand extends Command implements Listener {
                     return true;
                 }
                 if (args[1].contains(".")) {
-                    // 封禁 IP
-                    plugin.getBanManager().banIp(new BanIpEntry(args[1], sender.getName(), TimeUtils.generateTimestampFromDays(Integer.valueOf(args[2])), args[3]));
-                    Utils.sendMessage(sender, currentModel.addBanIp(args[1], Integer.valueOf(args[2]), args[3]));
+                    plugin.getBanManager().banIp(new BanIpEntry(args[1], sender.getName(), TimeUtils.generateTimestampFromDays(Integer.parseInt(args[2])), args[3]));
+                    Utils.sendMessage(sender, currentModel.addBanIp(args[1], Integer.parseInt(args[2]), args[3]));
                 } else {
-                    // 封禁玩家
-                    plugin.getBanManager().banPlayer(new BanEntry(args[1], sender.getName(), TimeUtils.generateTimestampFromDays(Integer.valueOf(args[2])), args[3]));
-                    Utils.sendMessage(sender, currentModel.addBan(args[1], Integer.valueOf(args[2]), args[3]));
+                    plugin.getBanManager().banPlayer(new BanEntry(args[1], sender.getName(), TimeUtils.generateTimestampFromDays(Integer.parseInt(args[2])), args[3]));
+                    Utils.sendMessage(sender, currentModel.addBan(args[1], Integer.parseInt(args[2]), args[3]));
                 }
                 break;
             case "remove":
@@ -109,11 +120,9 @@ public class LengbanlistCommand extends Command implements Listener {
                     return true;
                 }
                 if (args[1].contains(".")) {
-                    // 解封 IP
                     plugin.getBanManager().unbanIp(args[1]);
                     Utils.sendMessage(sender, currentModel.removeBanIp(args[1]));
                 } else {
-                    // 解封玩家
                     plugin.getBanManager().unbanPlayer(args[1]);
                     Utils.sendMessage(sender, currentModel.removeBan(args[1]));
                 }
@@ -174,34 +183,40 @@ public class LengbanlistCommand extends Command implements Listener {
                     Utils.sendMessage(sender, availableModels.toString());
                     return true;
                 }
-                String modelName = args[1];
-                if (!ModelManager.getInstance().getModels().containsKey(modelName)) {
+                String modelName = args[1].toLowerCase();
+                boolean found = false;
+                for (String name : ModelManager.getInstance().getModels().keySet()) {
+                    if (name.equalsIgnoreCase(modelName)) {
+                        ModelManager.switchModel(name);
+                        Utils.sendMessage(sender, plugin.prefix() + "§a已切换到模型: " + name);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
                     Utils.sendMessage(sender, plugin.prefix() + "§c不支持的模型名称。");
                     StringBuilder availableModels = new StringBuilder("§6§l可用模型： §b");
                     for (String name : ModelManager.getInstance().getModels().keySet()) {
                         availableModels.append(name).append(" ");
                     }
                     Utils.sendMessage(sender, availableModels.toString());
-                    return true;
                 }
-                ModelManager.switchModel(modelName);
-                Utils.sendMessage(sender, plugin.prefix() + "§a已切换到模型: " + modelName);
                 break;
             case "mute":
-    if (!sender.hasPermission("lengbanlist.mute")) {
-        Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
-        return true;
-    }
-    if (args.length < 3) {
-        Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式 /lban mute <玩家名> <原因>");
-        return true;
-    }
-    String targetPlayer = args[1];
-    String muteReason = args[2];
-    MuteEntry muteEntry = new MuteEntry(targetPlayer, sender.getName(), System.currentTimeMillis(), muteReason);
-    plugin.getMuteManager().mutePlayer(muteEntry);
-    Utils.sendMessage(sender, currentModel.addMute(targetPlayer, muteReason));
-    break;
+                if (!sender.hasPermission("lengbanlist.mute")) {
+                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    return true;
+                }
+                if (args.length < 3) {
+                    Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式 /lban mute <玩家名> <原因>");
+                    return true;
+                }
+                String targetPlayer = args[1];
+                String muteReason = args[2];
+                MuteEntry muteEntry = new MuteEntry(targetPlayer, sender.getName(), System.currentTimeMillis(), muteReason);
+                plugin.getMuteManager().mutePlayer(muteEntry);
+                Utils.sendMessage(sender, currentModel.addMute(targetPlayer, muteReason));
+                break;
             case "list-mute":
                 if (!sender.hasPermission("lengbanlist.listmute")) {
                     Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
@@ -234,9 +249,8 @@ public class LengbanlistCommand extends Command implements Listener {
     }
 
     private void openChestUI(Player player) {
-        Inventory chest = Bukkit.createInventory(null, 36, "§bLengbanlist"); // 扩大为 36 格
+        Inventory chest = Bukkit.createInventory(null, 36, "§bLengbanlist");
 
-        // 设置玻璃背景
         ItemStack glass = new ItemStack(Material.BLUE_STAINED_GLASS_PANE);
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.setDisplayName(" ");
@@ -245,7 +259,6 @@ public class LengbanlistCommand extends Command implements Listener {
             chest.setItem(i, glass);
         }
 
-        // 创建按钮
         ItemStack toggleBroadcast = createItem(
                 "§a切换自动广播 (" + (plugin.isBroadcastEnabled() ? "开启" : "关闭") + ")",
                 "§7/lban toggle",
@@ -269,7 +282,6 @@ public class LengbanlistCommand extends Command implements Listener {
         ItemStack unmute = createItem("§a解除禁言", "§7/lban unmute", "§7解除一个玩家的禁言", Sound.BLOCK_NOTE_BLOCK_SNARE);
         ItemStack listMute = createItem("§a查看禁言列表", "§7/lban list-mute", "§7查看被禁言的玩家列表", Sound.BLOCK_NOTE_BLOCK_HARP);
 
-        // 添加按钮到 Chest
         chest.setItem(10, toggleBroadcast);
         chest.setItem(11, broadcast);
         chest.setItem(12, list);
@@ -283,7 +295,6 @@ public class LengbanlistCommand extends Command implements Listener {
         chest.setItem(20, listMute);
         chest.setItem(22, sponsor);
 
-        // 打开 Chest
         player.openInventory(chest);
     }
 
@@ -297,7 +308,6 @@ public class LengbanlistCommand extends Command implements Listener {
         meta.setLore(lore);
         item.setItemMeta(meta);
 
-        // 播放音效
         if (sound != null) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 Player player = Bukkit.getPlayer(meta.getDisplayName());
@@ -310,21 +320,13 @@ public class LengbanlistCommand extends Command implements Listener {
         return item;
     }
 
-    /**
-     * 调用 API 解析 IP 地址的地理位置
-     *
-     * @param ip 需要解析的 IP 地址
-     * @return 解析后的地理位置信息，如果解析失败则返回 null
-     */
     private String getIPLocation(String ip) {
         try {
-            // 构建 API 请求 URL
             String apiUrl = "https://www.ip.cn/api/index?ip=" + ip + "&type=0";
             URL url = new URL(apiUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
-            // 读取 API 响应
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder response = new StringBuilder();
             String line;
@@ -333,22 +335,19 @@ public class LengbanlistCommand extends Command implements Listener {
             }
             reader.close();
 
-            // 解析 API 响应（假设返回的是 JSON 格式）
             String jsonResponse = response.toString();
-            // 这里可以根据 API 返回的实际 JSON 结构进行解析
-            // 例如，假设返回的 JSON 中包含 "location" 字段
             String location = jsonResponse.split("\"location\":\"")[1].split("\"")[0];
             return location;
         } catch (Exception e) {
             e.printStackTrace();
-            return null; // 解析失败时返回 null
+            return null;
         }
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getView().getTitle().equals("§bLengbanlist")) {
-            event.setCancelled(true); // 防止玩家移动物品
+            event.setCancelled(true);
 
             Player player = (Player) event.getWhoClicked();
             ItemStack clickedItem = event.getCurrentItem();
@@ -357,9 +356,8 @@ public class LengbanlistCommand extends Command implements Listener {
                 return;
             }
 
-            String command = clickedItem.getItemMeta().getLore().get(0).replace("§7", ""); // 获取按钮的命令
+            String command = clickedItem.getItemMeta().getLore().get(0).replace("§7", "");
 
-            // 根据按钮的命令调用相应的逻辑
             switch (command) {
                 case "/lban toggle":
                     player.performCommand("lban toggle");
@@ -374,33 +372,27 @@ public class LengbanlistCommand extends Command implements Listener {
                     player.performCommand("lban reload");
                     break;
                 case "/lban add":
-                    // 调用 ChestUIListener 打开铁砧界面
                     plugin.getChestUIListener().openAnvilForBan(player, "playerID");
                     break;
                 case "/lban remove":
-                    // 调用 ChestUIListener 打开铁砧界面
                     plugin.getChestUIListener().openAnvilForUnban(player);
                     break;
                 case "/lban help":
                     player.performCommand("lban help");
                     break;
                 case "/lban model":
-                    // 调用 ModelChoiceListener 打开模型选择界面
                     ModelManager.getInstance().openModelSelectionUI(player);
                     break;
                 case "/lban mute":
-                    // 调用 ChestUIListener 打开铁砧界面
                     plugin.getChestUIListener().openAnvilForMute(player, "playerID");
                     break;
                 case "/lban unmute":
-                    // 调用 ChestUIListener 打开铁砧界面
                     plugin.getChestUIListener().openAnvilForUnmute(player);
                     break;
-                case "/lban list-mute":
+                case "/lengbanlist list-mute":
                     player.performCommand("lban list-mute");
                     break;
                 default:
-                    // 其他命令直接执行
                     player.performCommand(command);
                     break;
             }

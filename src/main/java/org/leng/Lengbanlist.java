@@ -14,6 +14,7 @@ import org.leng.listeners.ChestUIListener;
 import org.leng.listeners.PlayerJoinListener;
 import org.leng.listeners.AnvilGUIListener;
 import org.leng.listeners.ModelChoiceListener;
+import org.leng.listeners.OpJoinListener;
 import org.leng.manager.BanManager;
 import org.leng.manager.MuteManager;
 import org.leng.manager.ModelManager;
@@ -33,6 +34,7 @@ public class Lengbanlist extends JavaPlugin {
     private FileConfiguration banFC;
     private FileConfiguration banIpFC;
     private FileConfiguration muteFC;
+    private FileConfiguration broadcastFC;
     private ModelChoiceListener modelChoiceListener;
 
     @Override
@@ -70,6 +72,14 @@ public class Lengbanlist extends JavaPlugin {
         banFC = YamlConfiguration.loadConfiguration(banFile);
         banIpFC = YamlConfiguration.loadConfiguration(banIpFile);
         muteFC = YamlConfiguration.loadConfiguration(muteFile);
+
+        // 初始化 broadcastFC
+        File broadcastFile = new File(getDataFolder(), "broadcast.yml");
+        if (!broadcastFile.exists()) {
+            broadcastFile.getParentFile().mkdirs();
+            saveResource("broadcast.yml", false);
+        }
+        broadcastFC = YamlConfiguration.loadConfiguration(broadcastFile);
     }
 
     @Override
@@ -80,10 +90,9 @@ public class Lengbanlist extends JavaPlugin {
 
         // 注册监听器
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
+        getServer().getPluginManager().registerEvents(new OpJoinListener(), this);
         getServer().getPluginManager().registerEvents(new ChestUIListener(this), this);
         getServer().getPluginManager().registerEvents(new AnvilGUIListener(this), this);
-
-        // 初始化 ModelChoiceListener
         modelChoiceListener = new ModelChoiceListener(this);
         getServer().getPluginManager().registerEvents(modelChoiceListener, this);
 
@@ -92,8 +101,8 @@ public class Lengbanlist extends JavaPlugin {
         getCommandMap().register("", new BanCommand());
         getCommandMap().register("", new BanIpCommand());
         getCommandMap().register("", new UnbanCommand());
-        getCommandMap().register("", new BanIpCommand()); 
 
+        // 彩色 ASCII 艺术文字
         getServer().getConsoleSender().sendMessage("§b  _                      ____              _      _     _   ");
         getServer().getConsoleSender().sendMessage("§6 | |                    |  _ \\            | |    (_)   | |  ");
         getServer().getConsoleSender().sendMessage("§b | |     ___ _ __   __ _| |_) | __ _ _ __ | |     _ ___| |_ ");
@@ -192,6 +201,10 @@ public class Lengbanlist extends JavaPlugin {
         return muteFC;
     }
 
+    public FileConfiguration getBroadcastFC() {
+        return broadcastFC;
+    }
+
     public void saveBanConfig() {
         try {
             banFC.save(new File(getDataFolder(), "ban-list.yml"));
@@ -215,7 +228,16 @@ public class Lengbanlist extends JavaPlugin {
             e.printStackTrace();
         }
     }
+
+    public void saveBroadcastConfig() {
+        try {
+            broadcastFC.save(new File(getDataFolder(), "broadcast.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public ChestUIListener getChestUIListener() {
-    return new ChestUIListener(this);
+        return new ChestUIListener(this);
     }
 }

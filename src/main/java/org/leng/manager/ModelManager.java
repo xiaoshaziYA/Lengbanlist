@@ -8,7 +8,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration; // 导入 FileConfiguration
+import org.bukkit.configuration.file.FileConfiguration; 
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,6 @@ public class ModelManager {
     }
 
     private ModelManager() {
-        // 初始化所有模型
         loadModel("Default");
         loadModel("HuTao");
         loadModel("Furina");
@@ -37,7 +36,6 @@ public class ModelManager {
         loadModel("Zero");
         loadModel("Herta");
 
-        // 加载当前配置中指定的模型
         String modelName = Lengbanlist.getInstance().getConfig().getString("Model", "Default");
         switchModel(modelName.toLowerCase());
     }
@@ -63,8 +61,9 @@ public class ModelManager {
     }
 
     public static void switchModel(String modelName) {
-        if (models.containsKey(modelName.toLowerCase())) {
-            currentModel = models.get(modelName.toLowerCase());
+        String lowerCaseModelName = modelName.toLowerCase();
+        if (models.containsKey(lowerCaseModelName)) {
+            currentModel = models.get(lowerCaseModelName);
             Lengbanlist.getInstance().getConfig().set("Model", currentModel.getName());
             Lengbanlist.getInstance().saveConfig();
             Lengbanlist.getInstance().getServer().getConsoleSender().sendMessage("§a已切换到模型: " + currentModel.getName());
@@ -78,42 +77,27 @@ public class ModelManager {
     }
 
     public void reloadModel() {
-        // 重新加载当前配置中指定的模型
         String modelName = Lengbanlist.getInstance().getConfig().getString("Model", "Default");
         switchModel(modelName.toLowerCase());
         Lengbanlist.getInstance().getServer().getConsoleSender().sendMessage("§a模型已重新加载，当前模型: " + currentModel.getName());
     }
 
-    // 获取模型的材料（通过配置文件）
     public static Material getModelMaterial(String modelName) {
-        // 从配置文件中获取模型的材料名称
         FileConfiguration config = Lengbanlist.getInstance().getConfig();
         String materialName = config.getString("models." + modelName.toLowerCase() + ".material", "PAPER");
-
-        // 将材料名称转换为 Material 类型
         Material material = Material.matchMaterial(materialName);
-        if (material == null) {
-            // 如果找不到对应的 Material，返回默认值 PAPER
-            return Material.PAPER;
-        }
-        return material;
+        return material != null ? material : Material.PAPER;
     }
 
-    // 添加 openModelSelectionUI 方法
     public void openModelSelectionUI(Player player) {
-        // 创建一个新的库存界面，用于选择模型
         Inventory modelSelectionUI = Bukkit.createInventory(player, 9, "§b选择模型");
-
-        // 遍历所有模型，将它们添加到库存界面中
         for (Map.Entry<String, Model> entry : models.entrySet()) {
-            ItemStack item = new ItemStack(Material.PAPER); // 使用纸作为物品
+            ItemStack item = new ItemStack(Material.PAPER);
             ItemMeta meta = item.getItemMeta();
-            meta.setDisplayName("§a" + entry.getKey()); // 设置模型名称为物品的显示名称
+            meta.setDisplayName("§a" + entry.getKey());
             item.setItemMeta(meta);
             modelSelectionUI.addItem(item);
         }
-
-        // 打开库存界面给玩家
         player.openInventory(modelSelectionUI);
     }
 }
