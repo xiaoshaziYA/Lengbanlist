@@ -40,6 +40,10 @@ public class TimeUtils {
      * @return 时间戳（毫秒），解析失败返回 -1
      */
     public static long parseTime(String timeStr) {
+        if (timeStr.equalsIgnoreCase("forever")) {
+            return Long.MAX_VALUE; // 返回一个非常大的值，表示永久封禁
+        }
+
         Matcher matcher = Pattern.compile("(\\d+)([smhdwMy])").matcher(timeStr);
         if (!matcher.matches()) {
             return -1;
@@ -48,14 +52,29 @@ public class TimeUtils {
         String unit = matcher.group(2);
         long millis;
         switch (unit) {
-            case "s": millis = Duration.ofSeconds(amount).toMillis(); break;
-            case "m": millis = Duration.ofMinutes(amount).toMillis(); break;
-            case "h": millis = Duration.ofHours(amount).toMillis(); break;
-            case "d": millis = Duration.ofDays(amount).toMillis(); break;
-            case "w": millis = Duration.ofDays(amount * 7).toMillis(); break;
-            case "M": millis = Duration.ofDays(amount * 30).toMillis(); break;
-            case "y": millis = Duration.ofDays(amount * 365).toMillis(); break;
-            default: return -1;
+            case "s":
+                millis = Duration.ofSeconds(amount).toMillis();
+                break;
+            case "m":
+                millis = Duration.ofMinutes(amount).toMillis();
+                break;
+            case "h":
+                millis = Duration.ofHours(amount).toMillis();
+                break;
+            case "d":
+                millis = Duration.ofDays(amount).toMillis();
+                break;
+            case "w":
+                millis = Duration.ofDays(amount * 7).toMillis();
+                break;
+            case "M":
+                millis = Duration.ofDays(amount * 30).toMillis();
+                break;
+            case "y":
+                millis = Duration.ofDays(amount * 365).toMillis();
+                break;
+            default:
+                return -1;
         }
         return System.currentTimeMillis() + millis;
     }
@@ -77,6 +96,10 @@ public class TimeUtils {
      * @return 剩余时间的可读字符串
      */
     public static String getRemainingTime(long timestamp) {
+        if (timestamp == Long.MAX_VALUE) {
+            return "永久封禁";
+        }
+
         long remainingMillis = timestamp - System.currentTimeMillis();
         if (remainingMillis <= 0) {
             return "已过期";

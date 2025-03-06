@@ -22,4 +22,8 @@ public interface Model {
     String addBanIp(String ip, int days, String reason);
 
     String removeBanIp(String ip);
+
+    String addWarn(String player, String reason);
+
+    String removeWarn(String player);
 }

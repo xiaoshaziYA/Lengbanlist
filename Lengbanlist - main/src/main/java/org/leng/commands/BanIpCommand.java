@@ -47,6 +47,7 @@ public class BanIpCommand extends Command {
             Utils.sendMessage(sender, "§c - 1w: 周 (1 周，等于 7 天)");
             Utils.sendMessage(sender, "§c - 1M: 月 (1 月，按 30 天计算)");
             Utils.sendMessage(sender, "§c - 1y: 年 (1 年，按 365 天计算)");
+            Utils.sendMessage(sender, "§c - forever: 永久封禁");
             return false;
         }
 
@@ -54,7 +55,11 @@ public class BanIpCommand extends Command {
         Lengbanlist.getInstance().banManager.banIp(
                 new org.leng.object.BanIpEntry(args[0], sender.getName(), banTimestamp, args[2])
         );
-        Utils.sendMessage(sender, "§l§a成功封禁 IP: " + args[0] + "，时长: " + args[1]);
+        if (banTimestamp == Long.MAX_VALUE) {
+            Utils.sendMessage(sender, "§l§a成功永久封禁 IP: " + args[0]);
+        } else {
+            Utils.sendMessage(sender, "§l§a成功封禁 IP: " + args[0] + "，时长: " + args[1]);
+        }
         return true;
     }
 }

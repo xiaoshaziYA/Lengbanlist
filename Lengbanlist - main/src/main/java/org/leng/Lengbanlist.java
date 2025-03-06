@@ -10,6 +10,8 @@ import org.leng.commands.BanCommand;
 import org.leng.commands.BanIpCommand;
 import org.leng.commands.LengbanlistCommand;
 import org.leng.commands.UnbanCommand;
+import org.leng.commands.WarnCommand;
+import org.leng.commands.UnwarnCommand;
 import org.leng.listeners.ChestUIListener;
 import org.leng.listeners.PlayerJoinListener;
 import org.leng.listeners.AnvilGUIListener;
@@ -17,6 +19,7 @@ import org.leng.listeners.ModelChoiceListener;
 import org.leng.listeners.OpJoinListener;
 import org.leng.manager.BanManager;
 import org.leng.manager.MuteManager;
+import org.leng.manager.WarnManager;
 import org.leng.manager.ModelManager;
 import org.leng.utils.GitHubUpdateChecker;
 
@@ -28,6 +31,7 @@ public class Lengbanlist extends JavaPlugin {
     private static Lengbanlist instance;
     public BanManager banManager;
     public MuteManager muteManager;
+    public WarnManager warnManager;
     public BukkitTask task;
     private boolean isBroadcast;
     public FileConfiguration ipFC;
@@ -35,6 +39,7 @@ public class Lengbanlist extends JavaPlugin {
     private FileConfiguration banIpFC;
     private FileConfiguration muteFC;
     private FileConfiguration broadcastFC;
+    private FileConfiguration warnFC;
     private ModelChoiceListener modelChoiceListener;
 
     @Override
@@ -43,6 +48,7 @@ public class Lengbanlist extends JavaPlugin {
         instance = this;
         banManager = new BanManager();
         muteManager = new MuteManager();
+        warnManager = new WarnManager();
         isBroadcast = getConfig().getBoolean("opensendtime");
 
         // 初始化 ipFC
@@ -57,6 +63,7 @@ public class Lengbanlist extends JavaPlugin {
         File banFile = new File(getDataFolder(), "ban-list.yml");
         File banIpFile = new File(getDataFolder(), "banip-list.yml");
         File muteFile = new File(getDataFolder(), "mute-list.yml");
+        File warnFile = new File(getDataFolder(), "warn-list.yml");
         if (!banFile.exists()) {
             banFile.getParentFile().mkdirs();
             saveResource("ban-list.yml", false);
@@ -69,9 +76,14 @@ public class Lengbanlist extends JavaPlugin {
             muteFile.getParentFile().mkdirs();
             saveResource("mute-list.yml", false);
         }
+        if (!warnFile.exists()) {
+            warnFile.getParentFile().mkdirs();
+            saveResource("warn-list.yml", false);
+        }
         banFC = YamlConfiguration.loadConfiguration(banFile);
         banIpFC = YamlConfiguration.loadConfiguration(banIpFile);
         muteFC = YamlConfiguration.loadConfiguration(muteFile);
+        warnFC = YamlConfiguration.loadConfiguration(warnFile);
 
         // 初始化 broadcastFC
         File broadcastFile = new File(getDataFolder(), "broadcast.yml");
@@ -101,6 +113,8 @@ public class Lengbanlist extends JavaPlugin {
         getCommandMap().register("", new BanCommand());
         getCommandMap().register("", new BanIpCommand());
         getCommandMap().register("", new UnbanCommand());
+        getCommandMap().register("", new WarnCommand(this));
+        getCommandMap().register("", new UnwarnCommand(this));
 
         // 彩色 ASCII 艺术文字
         getServer().getConsoleSender().sendMessage("§b  _                      ____              _      _     _   ");
@@ -116,7 +130,7 @@ public class Lengbanlist extends JavaPlugin {
         getServer().getConsoleSender().sendMessage("§b赞助获得更多福利:https://afdian.com/a/lengbanlist");
 
         new Metrics(this, 24495);
-        GitHubUpdateChecker.checkUpdata();
+        GitHubUpdateChecker.checkUpdate();
 
         if (isBroadcast) {
             task = new BroadCastBanCountMessage().runTaskTimer(Lengbanlist.getInstance(), 0L, getConfig().getInt("sendtime") * 1200L);
@@ -185,6 +199,10 @@ public class Lengbanlist extends JavaPlugin {
         return muteManager;
     }
 
+    public WarnManager getWarnManager() {
+        return warnManager;
+    }
+
     public ModelChoiceListener getModelChoiceListener() {
         return modelChoiceListener;
     }
@@ -203,6 +221,10 @@ public class Lengbanlist extends JavaPlugin {
 
     public FileConfiguration getBroadcastFC() {
         return broadcastFC;
+    }
+
+    public FileConfiguration getWarnFC() {
+        return warnFC;
     }
 
     public void saveBanConfig() {
@@ -232,6 +254,14 @@ public class Lengbanlist extends JavaPlugin {
     public void saveBroadcastConfig() {
         try {
             broadcastFC.save(new File(getDataFolder(), "broadcast.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveWarnConfig() {
+        try {
+            warnFC.save(new File(getDataFolder(), "warn-list.yml"));
         } catch (IOException e) {
             e.printStackTrace();
         }

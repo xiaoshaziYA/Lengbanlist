@@ -30,6 +30,7 @@ import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class LengbanlistCommand extends Command implements Listener {
     }
 
     @Override
-       public boolean execute(CommandSender sender, String s, String[] args) {
+    public boolean execute(CommandSender sender, String s, String[] args) {
         Model currentModel = ModelManager.getInstance().getCurrentModel();
         if (args.length == 0) {
             currentModel.showHelp(sender);
@@ -53,7 +54,7 @@ public class LengbanlistCommand extends Command implements Listener {
         switch (args[0].toLowerCase()) {
             case "toggle":
                 if (!sender.hasPermission("lengbanlist.toggle")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 boolean enabled = !plugin.isBroadcastEnabled();
@@ -62,7 +63,7 @@ public class LengbanlistCommand extends Command implements Listener {
                 break;
             case "a":
                 if (!sender.hasPermission("lengbanlist.broadcast")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 String defaultMessage = plugin.getBroadcastFC().getString("default-message");
@@ -77,14 +78,14 @@ public class LengbanlistCommand extends Command implements Listener {
                 break;
             case "list":
                 if (!sender.hasPermission("lengbanlist.list")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 showBanList(sender);
                 break;
             case "reload":
                 if (!sender.hasPermission("lengbanlist.reload")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 plugin.reloadConfig();
@@ -95,7 +96,7 @@ public class LengbanlistCommand extends Command implements Listener {
                 break;
             case "add":
                 if (!sender.hasPermission("lengbanlist.ban")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 if (args.length < 4) {
@@ -112,7 +113,7 @@ public class LengbanlistCommand extends Command implements Listener {
                 break;
             case "remove":
                 if (!sender.hasPermission("lengbanlist.unban")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 if (args.length < 2) {
@@ -129,14 +130,14 @@ public class LengbanlistCommand extends Command implements Listener {
                 break;
             case "help":
                 if (!sender.hasPermission("lengbanlist.help")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 currentModel.showHelp(sender);
                 break;
             case "open":
                 if (!sender.hasPermission("lengbanlist.open")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 if (sender instanceof Player) {
@@ -149,7 +150,7 @@ public class LengbanlistCommand extends Command implements Listener {
                 break;
             case "getip":
                 if (!sender.hasPermission("lengbanlist.getIP")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 if (args.length < 2) {
@@ -171,7 +172,7 @@ public class LengbanlistCommand extends Command implements Listener {
                 break;
             case "model":
                 if (!sender.hasPermission("lengbanlist.model")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 if (args.length < 2) {
@@ -204,7 +205,7 @@ public class LengbanlistCommand extends Command implements Listener {
                 break;
             case "mute":
                 if (!sender.hasPermission("lengbanlist.mute")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 if (args.length < 3) {
@@ -219,7 +220,7 @@ public class LengbanlistCommand extends Command implements Listener {
                 break;
             case "unmute":
                 if (!sender.hasPermission("lengbanlist.mute")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 if (args.length < 2) {
@@ -232,13 +233,40 @@ public class LengbanlistCommand extends Command implements Listener {
                 break;
             case "list-mute":
                 if (!sender.hasPermission("lengbanlist.listmute")) {
-                    Utils.sendMessage(sender, plugin.prefix() + "§c你没有权限使用此命令。");
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
                     return true;
                 }
                 showMuteList(sender);
                 break;
+            case "warn":
+                if (!sender.hasPermission("lengbanlist.warn")) {
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
+                    return true;
+                }
+                if (args.length < 3) {
+                    Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式：/lban warn <玩家名> <原因>");
+                    return true;
+                }
+                String warnTarget = args[1];
+                String reason = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+                plugin.getWarnManager().warnPlayer(warnTarget, reason);
+                Utils.sendMessage(sender, currentModel.addWarn(warnTarget, reason));
+                break;
+            case "unwarn":
+                if (!sender.hasPermission("lengbanlist.unwarn")) {
+                    Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
+                    return true;
+                }
+                if (args.length < 2) {
+                    Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式：/lban unwarn <玩家名>");
+                    return true;
+                }
+                String unwarnTarget = args[1];
+                plugin.getWarnManager().unwarnPlayer(unwarnTarget);
+                Utils.sendMessage(sender, currentModel.removeWarn(unwarnTarget));
+                break;
             default:
-                Utils.sendMessage(sender, "未知的子命令。");
+                Utils.sendMessage(sender, plugin.prefix() + "§c你说的啥啊喵？喵喵看不懂~");
                 break;
         }
         return true;
@@ -402,7 +430,7 @@ public class LengbanlistCommand extends Command implements Listener {
                 case "/lban unmute":
                     plugin.getChestUIListener().openAnvilForUnmute(player);
                     break;
-                case "/lengbanlist list-mute":
+                case "/lban list-mute":
                     player.performCommand("lban list-mute");
                     break;
                 default:
