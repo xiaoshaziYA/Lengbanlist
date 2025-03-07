@@ -268,6 +268,19 @@ public class LengbanlistCommand extends Command implements Listener {
             default:
                 Utils.sendMessage(sender, plugin.prefix() + "§c你说的啥啊喵？喵喵看不懂~");
                 break;
+            case "check":
+    if (!sender.hasPermission("lengbanlist.check")) {
+        Utils.sendMessage(sender, plugin.prefix() + "§c不是你的工作喵！");
+        return true;
+    }
+    if (args.length < 2) {
+        Utils.sendMessage(sender, plugin.prefix() + "§c§l错误的命令格式，正确格式：/lban check <玩家名/IP>");
+        return true;
+    }
+    String checkTarget = args[1];
+    CheckCommand checkCommand = new CheckCommand(plugin);
+    checkCommand.execute(sender, "check", new String[]{checkTarget});
+    break;
         }
         return true;
     }

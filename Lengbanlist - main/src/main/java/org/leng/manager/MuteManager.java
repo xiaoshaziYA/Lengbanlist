@@ -50,4 +50,14 @@ public class MuteManager {
         }
         return muteList;
     }
+
+    // 检查玩家是否被禁言
+    public boolean isPlayerMuted(String playerName) {
+        for (MuteEntry entry : getMuteList()) {
+            if (entry.getTarget().equals(playerName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

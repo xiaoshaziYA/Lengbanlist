@@ -12,6 +12,7 @@ import org.leng.commands.LengbanlistCommand;
 import org.leng.commands.UnbanCommand;
 import org.leng.commands.WarnCommand;
 import org.leng.commands.UnwarnCommand;
+import org.leng.commands.CheckCommand; 
 import org.leng.listeners.ChestUIListener;
 import org.leng.listeners.PlayerJoinListener;
 import org.leng.listeners.AnvilGUIListener;
@@ -115,8 +116,8 @@ public class Lengbanlist extends JavaPlugin {
         getCommandMap().register("", new UnbanCommand());
         getCommandMap().register("", new WarnCommand(this));
         getCommandMap().register("", new UnwarnCommand(this));
+        getCommandMap().register("", new CheckCommand(this));
 
-        // 彩色 ASCII 艺术文字
         getServer().getConsoleSender().sendMessage("§b  _                      ____              _      _     _   ");
         getServer().getConsoleSender().sendMessage("§6 | |                    |  _ \\            | |    (_)   | |  ");
         getServer().getConsoleSender().sendMessage("§b | |     ___ _ __   __ _| |_) | __ _ _ __ | |     _ ___| |_ ");
@@ -125,9 +126,9 @@ public class Lengbanlist extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(" §6|______\\___|_| |_\\__,|_|___/ \\__,_|_| |_|______|_|___/\\__|");
         getServer().getConsoleSender().sendMessage("§b                   __/ |                                    ");
         getServer().getConsoleSender().sendMessage("§f                   |___/                                     ");
-        getServer().getConsoleSender().sendMessage("§b当前运行版本：v" + getPluginVersion());
-        getServer().getConsoleSender().sendMessage("§b当前运行在：" + Bukkit.getServer().getVersion());
-        getServer().getConsoleSender().sendMessage("§b赞助获得更多福利:https://afdian.com/a/lengbanlist");
+        getServer().getConsoleSender().sendMessage("§6当前运行版本：v" + getPluginVersion());
+        getServer().getConsoleSender().sendMessage("§3当前运行在：" + Bukkit.getServer().getVersion());
+        getServer().getConsoleSender().sendMessage("§b感谢开源社区以及作者：§nLeng");
 
         new Metrics(this, 24495);
         GitHubUpdateChecker.checkUpdate();
@@ -139,7 +140,7 @@ public class Lengbanlist extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getServer().getConsoleSender().sendMessage(prefix() + "§4正在卸载");
+        getServer().getConsoleSender().sendMessage(prefix() + "§k§4正在卸载");
         getServer().getConsoleSender().sendMessage(prefix() + "§f期待我们的下一次相遇！");
     }
 
@@ -225,6 +226,10 @@ public class Lengbanlist extends JavaPlugin {
 
     public FileConfiguration getWarnFC() {
         return warnFC;
+    }
+
+    public FileConfiguration getIpFC() {
+        return ipFC;
     }
 
     public void saveBanConfig() {
