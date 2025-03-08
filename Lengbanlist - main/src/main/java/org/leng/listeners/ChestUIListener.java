@@ -1,17 +1,18 @@
 package org.leng.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.leng.Lengbanlist;
 import org.leng.manager.ModelManager;
 import org.leng.utils.Utils;
-import org.bukkit.inventory.Inventory;
 
 public class ChestUIListener implements Listener {
     public final Lengbanlist plugin;
@@ -69,7 +70,7 @@ public class ChestUIListener implements Listener {
 
     public void openAnvilForBan(Player player, String step) {
         Inventory anvil = Bukkit.createInventory(player, 9, "§b封禁玩家 - 输入" + (step.equals("playerID") ? "玩家ID或IP" : (step.equals("time") ? "时间" : "原因")));
-        ItemStack item = new ItemStack(org.bukkit.Material.PAPER); // 使用纸作为输入物品
+        ItemStack item = new ItemStack(Material.PAPER); // 使用纸作为输入物品
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("§a输入内容"); // 设置默认显示名称
         item.setItemMeta(meta);
@@ -82,7 +83,7 @@ public class ChestUIListener implements Listener {
 
     public void openAnvilForMute(Player player, String step) {
         Inventory anvil = Bukkit.createInventory(player, 9, "§b禁言玩家 - 输入" + (step.equals("playerID") ? "玩家ID" : "原因"));
-        ItemStack item = new ItemStack(org.bukkit.Material.PAPER); // 使用纸作为输入物品
+        ItemStack item = new ItemStack(Material.PAPER); // 使用纸作为输入物品
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("§a输入内容"); // 设置默认显示名称
         item.setItemMeta(meta);
@@ -95,7 +96,7 @@ public class ChestUIListener implements Listener {
 
     public void openAnvilForUnban(Player player) {
         Inventory anvil = Bukkit.createInventory(player, 9, "§b解封玩家");
-        ItemStack item = new ItemStack(org.bukkit.Material.PAPER); // 使用纸作为输入物品
+        ItemStack item = new ItemStack(Material.PAPER); // 使用纸作为输入物品
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("§a输入玩家ID或IP"); // 设置默认显示名称
         item.setItemMeta(meta);
@@ -107,7 +108,7 @@ public class ChestUIListener implements Listener {
 
     public void openAnvilForUnmute(Player player) {
         Inventory anvil = Bukkit.createInventory(player, 9, "§b解除禁言");
-        ItemStack item = new ItemStack(org.bukkit.Material.PAPER); // 使用纸作为输入物品
+        ItemStack item = new ItemStack(Material.PAPER); // 使用纸作为输入物品
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("§a输入玩家ID"); // 设置默认显示名称
         item.setItemMeta(meta);
@@ -119,7 +120,7 @@ public class ChestUIListener implements Listener {
 
     public void openAnvilForIPBan(Player player, String step) {
         Inventory anvil = Bukkit.createInventory(player, 9, "§b封禁IP - 输入" + (step.equals("ip") ? "IP地址" : (step.equals("time") ? "时间" : "原因")));
-        ItemStack item = new ItemStack(org.bukkit.Material.PAPER); // 使用纸作为输入物品
+        ItemStack item = new ItemStack(Material.PAPER); // 使用纸作为输入物品
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("§a输入内容"); // 设置默认显示名称
         item.setItemMeta(meta);

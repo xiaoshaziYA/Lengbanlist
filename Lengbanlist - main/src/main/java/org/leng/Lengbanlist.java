@@ -14,6 +14,10 @@ import org.leng.utils.GitHubUpdateChecker;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Lengbanlist extends JavaPlugin {
     private static Lengbanlist instance;
@@ -29,6 +33,7 @@ public class Lengbanlist extends JavaPlugin {
     private FileConfiguration broadcastFC;
     private FileConfiguration warnFC;
     private ModelChoiceListener modelChoiceListener;
+    private String hitokoto; 
 
     @Override
     public void onLoad() {
@@ -73,6 +78,9 @@ public class Lengbanlist extends JavaPlugin {
         muteFC = YamlConfiguration.loadConfiguration(muteFile);
         warnFC = YamlConfiguration.loadConfiguration(warnFile);
 
+        // 获取一言并存储到成员变量
+        hitokoto = getHitokoto();
+
         // 初始化 broadcastFC
         File broadcastFile = new File(getDataFolder(), "broadcast.yml");
         if (!broadcastFile.exists()) {
@@ -85,6 +93,7 @@ public class Lengbanlist extends JavaPlugin {
     @Override
     public void onEnable() {
         getServer().getConsoleSender().sendMessage(prefix() + "§f原神§2正在加载");
+        getServer().getConsoleSender().sendMessage(prefix() + "§6偷偷告诉你: §e" + hitokoto); 
         ModelManager.getInstance();
         getServer().getConsoleSender().sendMessage(prefix() + "§f哇！传送锚点已解锁，当前Model: " + ModelManager.getInstance().getCurrentModelName());
 
@@ -274,5 +283,38 @@ public class Lengbanlist extends JavaPlugin {
 
     public ChestUIListener getChestUIListener() {
         return new ChestUIListener(this);
+    }
+
+    // 获取一言的方法
+    public String getHitokoto() {
+        try {
+            URL url = new URL("https://v1.hitokoto.cn/");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode != 200) {
+                getLogger().warning("一言 API 请求失败，状态码: " + responseCode);
+                return "§c无法获取一言";
+            }
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            // 解析 JSON 响应
+            String jsonResponse = response.toString();
+            String hitokoto = jsonResponse.split("\"hitokoto\":\"")[1].split("\"")[0];
+            String from = jsonResponse.split("\"from\":\"")[1].split("\"")[0];
+            return hitokoto + " —— " + from;
+        } catch (Exception e) {
+            getLogger().warning("获取一言时出错: " + e.getMessage());
+            return "§c无法获取一言";
+        }
     }
 }

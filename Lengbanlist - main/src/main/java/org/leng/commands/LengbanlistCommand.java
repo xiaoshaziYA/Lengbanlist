@@ -302,55 +302,60 @@ public class LengbanlistCommand extends Command implements Listener {
         }
     }
 
-    private void openChestUI(Player player) {
-        Inventory chest = Bukkit.createInventory(null, 36, "§bLengbanlist");
+private void openChestUI(Player player) {
+        Inventory chest = Bukkit.createInventory(null, 54, "§bLengbanlist");
 
-        ItemStack glass = new ItemStack(Material.BLUE_STAINED_GLASS_PANE);
-        ItemMeta glassMeta = glass.getItemMeta();
-        glassMeta.setDisplayName(" ");
-        glass.setItemMeta(glassMeta);
-        for (int i = 0; i < 36; i++) {
+    // 设置背景玻璃板
+    ItemStack glass = new ItemStack(Material.BLUE_STAINED_GLASS_PANE);
+    ItemMeta glassMeta = glass.getItemMeta();
+    glassMeta.setDisplayName("§7我只是个装饰物");
+    glass.setItemMeta(glassMeta);
+    for (int i = 0; i < 54; i++) {
+        if (i < 9 || i >= 45 || i % 9 == 0 || i % 9 == 8) {
             chest.setItem(i, glass);
         }
-
-        ItemStack toggleBroadcast = createItem(
-                "§a切换自动广播 (" + (plugin.isBroadcastEnabled() ? "开启" : "关闭") + ")",
-                "§7/lban toggle",
-                "§7开启或关闭自动广播",
-                Sound.BLOCK_LEVER_CLICK
-        );
-        ItemStack broadcast = createItem("§a广播封禁人数", "§7/lban a", "§7广播当前封禁人数", Sound.BLOCK_NOTE_BLOCK_PLING);
-        ItemStack list = createItem("§a查看封禁名单", "§7/lban list", "§7查看被封禁的玩家列表", Sound.BLOCK_NOTE_BLOCK_HARP);
-        ItemStack reload = createItem("§a重新加载配置", "§7/lban reload", "§7重新加载插件配置", Sound.BLOCK_NOTE_BLOCK_BELL);
-        ItemStack addBan = createItem("§a添加封禁", "§7/lban add", "§7添加一个玩家到封禁名单", Sound.BLOCK_NOTE_BLOCK_BASS);
-        ItemStack removeBan = createItem("§a解除封禁", "§7/lban remove", "§7从封禁名单中移除一个玩家", Sound.BLOCK_NOTE_BLOCK_SNARE);
-        ItemStack help = createItem("§a帮助信息", "§7/lban help", "§7显示帮助信息", Sound.BLOCK_NOTE_BLOCK_FLUTE);
-        ItemStack model = createItem(
-                "§a切换模型 (" + ModelManager.getInstance().getCurrentModelName() + ")",
-                "§7/lban model",
-                "§7当前模型: " + ModelManager.getInstance().getCurrentModelName(),
-                Sound.BLOCK_NOTE_BLOCK_CHIME
-        );
-        ItemStack sponsor = createItem("§6赞助作者", "§7点击打开赞助链接", "§7https://afdian.com/a/lengbanlist", Sound.BLOCK_NOTE_BLOCK_PLING);
-        ItemStack mute = createItem("§a禁言玩家", "§7/lban mute", "§7禁言一个玩家", Sound.BLOCK_NOTE_BLOCK_BASS);
-        ItemStack unmute = createItem("§a解除禁言", "§7/lban unmute", "§7解除一个玩家的禁言", Sound.BLOCK_NOTE_BLOCK_SNARE);
-        ItemStack listMute = createItem("§a查看禁言列表", "§7/lban list-mute", "§7查看被禁言的玩家列表", Sound.BLOCK_NOTE_BLOCK_HARP);
-
-        chest.setItem(10, toggleBroadcast);
-        chest.setItem(11, broadcast);
-        chest.setItem(12, list);
-        chest.setItem(13, reload);
-        chest.setItem(14, addBan);
-        chest.setItem(15, removeBan);
-        chest.setItem(16, help);
-        chest.setItem(17, model);
-        chest.setItem(18, mute);
-        chest.setItem(19, unmute);
-        chest.setItem(20, listMute);
-        chest.setItem(22, sponsor);
-
-        player.openInventory(chest);
     }
+
+    // 添加功能按钮
+    ItemStack toggleBroadcast = createItem(
+            "§a切换自动广播 (" + (plugin.isBroadcastEnabled() ? "开启" : "关闭") + ")",
+            "§7/lban toggle",
+            "§7开启或关闭自动广播",
+            Sound.BLOCK_LEVER_CLICK
+    );
+    ItemStack broadcast = createItem("§a广播封禁人数", "§7/lban a", "§7广播当前封禁人数", Sound.BLOCK_NOTE_BLOCK_PLING);
+    ItemStack list = createItem("§a查看封禁名单", "§7/lban list", "§7查看被封禁的玩家列表", Sound.BLOCK_NOTE_BLOCK_HARP);
+    ItemStack reload = createItem("§a重新加载配置", "§7/lban reload", "§7重新加载插件配置", Sound.BLOCK_NOTE_BLOCK_BELL);
+    ItemStack addBan = createItem("§a添加封禁", "§7/lban add", "§7添加一个玩家到封禁名单", Sound.BLOCK_NOTE_BLOCK_BASS);
+    ItemStack removeBan = createItem("§a解除封禁", "§7/lban remove", "§7从封禁名单中移除一个玩家", Sound.BLOCK_NOTE_BLOCK_SNARE);
+    ItemStack help = createItem("§a帮助信息", "§7/lban help", "§7显示帮助信息", Sound.BLOCK_NOTE_BLOCK_FLUTE);
+    ItemStack model = createItem(
+            "§a切换模型 (" + ModelManager.getInstance().getCurrentModelName() + ")",
+            "§7/lban model",
+            "§7当前模型: " + ModelManager.getInstance().getCurrentModelName(),
+            Sound.BLOCK_NOTE_BLOCK_CHIME
+    );
+    ItemStack sponsor = createItem("§6赞助作者", "§7点击打开赞助链接", "§7https://afdian.com/a/lengbanlist", Sound.BLOCK_NOTE_BLOCK_PLING);
+    ItemStack mute = createItem("§a禁言玩家", "§7/lban mute", "§7禁言一个玩家", Sound.BLOCK_NOTE_BLOCK_BASS);
+    ItemStack unmute = createItem("§a解除禁言", "§7/lban unmute", "§7解除一个玩家的禁言", Sound.BLOCK_NOTE_BLOCK_SNARE);
+    ItemStack listMute = createItem("§a查看禁言列表", "§7/lban list-mute", "§7查看被禁言的玩家列表", Sound.BLOCK_NOTE_BLOCK_HARP);
+
+    // 设置按钮位置
+    chest.setItem(10, toggleBroadcast);
+    chest.setItem(12, broadcast);
+    chest.setItem(14, list);
+    chest.setItem(16, reload);
+    chest.setItem(20, addBan);
+    chest.setItem(22, removeBan);
+    chest.setItem(24, help);
+    chest.setItem(28, model);
+    chest.setItem(30, mute);
+    chest.setItem(32, unmute);
+    chest.setItem(34, listMute);
+    chest.setItem(40, sponsor);
+
+    player.openInventory(chest);
+}
 
     private ItemStack createItem(String displayName, String command, String description, Sound sound) {
         ItemStack item = new ItemStack(Material.PAPER);
