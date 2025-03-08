@@ -6,22 +6,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.command.CommandMap;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.leng.commands.BanCommand;
-import org.leng.commands.BanIpCommand;
-import org.leng.commands.LengbanlistCommand;
-import org.leng.commands.UnbanCommand;
-import org.leng.commands.WarnCommand;
-import org.leng.commands.UnwarnCommand;
-import org.leng.commands.CheckCommand; 
-import org.leng.listeners.ChestUIListener;
-import org.leng.listeners.PlayerJoinListener;
-import org.leng.listeners.AnvilGUIListener;
-import org.leng.listeners.ModelChoiceListener;
-import org.leng.listeners.OpJoinListener;
-import org.leng.manager.BanManager;
-import org.leng.manager.MuteManager;
-import org.leng.manager.WarnManager;
-import org.leng.manager.ModelManager;
+import org.leng.commands.*;
+import org.leng.listeners.*;
+import org.leng.manager.*;
 import org.leng.utils.GitHubUpdateChecker;
 
 import java.io.File;
@@ -102,8 +89,8 @@ public class Lengbanlist extends JavaPlugin {
         getServer().getConsoleSender().sendMessage(prefix() + "§f哇！传送锚点已解锁，当前Model: " + ModelManager.getInstance().getCurrentModelName());
 
         // 注册监听器
-        getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
-        getServer().getPluginManager().registerEvents(new OpJoinListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new OpJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new ChestUIListener(this), this);
         getServer().getPluginManager().registerEvents(new AnvilGUIListener(this), this);
         modelChoiceListener = new ModelChoiceListener(this);
@@ -141,6 +128,19 @@ public class Lengbanlist extends JavaPlugin {
     @Override
     public void onDisable() {
         getServer().getConsoleSender().sendMessage(prefix() + "§k§4正在卸载");
+        if (task != null) {
+            task.cancel();
+        }
+
+        // 注销所有监听器
+        org.bukkit.event.HandlerList.unregisterAll(this);
+
+        // 保存配置文件
+        saveBanConfig();
+        saveBanIpConfig();
+        saveMuteConfig();
+        saveBroadcastConfig();
+        saveWarnConfig();
         getServer().getConsoleSender().sendMessage(prefix() + "§f期待我们的下一次相遇！");
     }
 

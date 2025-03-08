@@ -374,29 +374,50 @@ public class LengbanlistCommand extends Command implements Listener {
         return item;
     }
 
-    private String getIPLocation(String ip) {
-        try {
-            String apiUrl = "https://www.ip.cn/api/index?ip=" + ip + "&type=0";
-            URL url = new URL(apiUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+/**
+ * 调用 API 解析 IP 地址的地理位置
+ *
+ * @param ip 需要解析的 IP 地址
+ * @return 解析后的地理位置信息，如果解析失败则返回 null
+ */
+private String getIPLocation(String ip) {
+    try {
+        String apiUrl = "https://ipapi.co/" + ip + "/json/"; // 使用更可靠的API
+        URL url = new URL(apiUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0"); // 添加User-Agent避免403
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-            }
-            reader.close();
-
-            String jsonResponse = response.toString();
-            String location = jsonResponse.split("\"location\":\"")[1].split("\"")[0];
-            return location;
-        } catch (Exception e) {
-            e.printStackTrace();
+        int responseCode = connection.getResponseCode();
+        if (responseCode != 200) {
+            plugin.getLogger().warning("IP API请求失败，状态码: " + responseCode);
             return null;
         }
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        reader.close();
+
+        String jsonResponse = response.toString();
+        // 使用更健壮的解析逻辑
+        if (jsonResponse.contains("\"country_name\"")) {
+            String country = jsonResponse.split("\"country_name\":\"")[1].split("\"")[0];
+            String region = jsonResponse.split("\"region\":\"")[1].split("\"")[0];
+            String city = jsonResponse.split("\"city\":\"")[1].split("\"")[0];
+            return country + ", " + region + ", " + city;
+        } else {
+            plugin.getLogger().warning("API响应格式异常: " + jsonResponse);
+            return null;
+        }
+    } catch (Exception e) {
+        plugin.getLogger().warning("解析IP地理位置时出错: " + e.getMessage());
+        return null;
     }
+}
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
