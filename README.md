@@ -11,11 +11,6 @@ Lengbanlist 是一款专为高版本 Minecraft 服务器设计的插件，它通
 - **便捷的 SQLite 支持**：内置 SQLite 数据库，轻松管理封禁数据，确保数据存储高效可靠。
 - **特色 Model 功能**：支持多种广播模式，管理员可以自由切换，满足不同场景下的需求。
 - **个性化切换**：提供多种广播风格和表情包支持，让封禁通知更生动有趣。
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/start.png)
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/show.png)
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/show1.png)
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/show2.png)
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/show3.png)
 
 ## 使用说明
 1. 将插件文件放入服务器的插件目录中。
@@ -61,11 +56,6 @@ Lengbanlist is a plugin designed for high-version Minecraft servers. It broadcas
 - **SQLite support**: Built-in SQLite database for efficient and reliable ban data management.
 - **Model functionality**: Supports multiple broadcast modes, enabling administrators to switch freely based on different scenarios.
 - **Personalization**: Provides various broadcast styles and supports emoticons, making ban notifications more lively and engaging.
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/start.png)
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/show.png)
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/show1.png)
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/show2.png)
-![img](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/Photos/show3.png)
 
 ## Usage
 1. Place the plugin file into the server's plugin directory.
