@@ -19,7 +19,10 @@ Lengbanlist 是一款专为高版本 Minecraft 服务器设计的插件，它通
 4. 重新加载插件或重启服务器，使配置生效。
 
 ## 命令帮助
-详细命令使用说明请参考：[Lengbanlist 命令帮助](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/LengbanlistCommandHelp.md)
+详细命令使用说明请参考：[Lengbanlist 命令帮助](LengbanlistCommandHelp.md)
+
+## 插件展示
+查看插件的实际效果和展示图片，请点击：[Lengbanlist 插件展示图片](Lengbanlist_Images.md)
 
 ## 注意事项
 - 本人是开发小白，如果插件存在不足之处，还请各位多多包涵，不要随意喷。如果觉得插件还不错，欢迎给个 star。同时，希望大家能够积极参与，一起助力插件的更新，让它变得更好。
@@ -64,7 +67,10 @@ Lengbanlist is a plugin designed for high-version Minecraft servers. It broadcas
 4. Reload the plugin or restart the server to apply the configuration.
 
 ## Command Help
-For detailed command usage, please refer to: [Lengbanlist Command Help](https://github.com/xiaoshaziYA/Lengbanlist/blob/main/LengbanlistCommandHelp.md)
+For detailed command usage, please refer to: [Lengbanlist Command Help](LengbanlistCommandHelp.md)
+
+## Plugin Showcase
+To view the actual effects and showcase images of the plugin, click here: [Lengbanlist Plugin Showcase](Lengbanlist_Images.md)
 
 ## Notes
 - I am a development newbie. If there are any shortcomings in the plugin, please be tolerant and do not criticize it casually. If you think the plugin is not bad, feel free to give it a star. At the same time, I hope everyone can actively participate and help update the plugin together to make it better.
